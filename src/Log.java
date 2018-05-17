@@ -2,7 +2,7 @@ import java.io.*;
 
 public class Log {
 
-    public static void log(String time,String location,String people,String operation){
+    public static void log(String time,String location,String people,String operation,String result){
         File file = new File("./log");
         if (!file.exists()){
             file.mkdir();
@@ -10,7 +10,7 @@ public class Log {
         File inforFile = new File("./log/" + people + ".txt");
 
         BufferedWriter bufferedWriter = null;
-        String information = time + ":" + operation + " on" + location;
+        String information = time + ":" + operation + ": " + result + " on" + location;
         if (inforFile.exists()){
             try {
                 bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./log/" + people + ".txt",  true )));

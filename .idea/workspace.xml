@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c48a1d7e-6362-4b6a-89a8-4e1fc1a7d72a" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/ManagerRepositry.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/Records.java" afterPath="$PROJECT_DIR$/src/Records.java" />
-      <change beforePath="$PROJECT_DIR$/src/StudentRecord.java" afterPath="$PROJECT_DIR$/src/StudentRecord.java" />
-      <change beforePath="$PROJECT_DIR$/src/TeacherRecord.java" afterPath="$PROJECT_DIR$/src/TeacherRecord.java" />
+      <change beforePath="$PROJECT_DIR$/src/Log.java" afterPath="$PROJECT_DIR$/src/Log.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,7 +29,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ManagerRepositry.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ManagerRepositry.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ManagerRepositry.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="240">
@@ -44,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Log.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Log.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Log.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+            <state relative-caret-position="180">
+              <caret line="12" column="69" lean-forward="false" selection-start-line="12" selection-start-column="69" selection-end-line="12" selection-end-column="69" />
               <folding />
             </state>
           </provider>
@@ -131,6 +126,7 @@
         <option value="$PROJECT_DIR$/src/Records.java" />
         <option value="$PROJECT_DIR$/src/ManagerMap.java" />
         <option value="$PROJECT_DIR$/src/ManagerRepositry.java" />
+        <option value="$PROJECT_DIR$/src/Log.java" />
       </list>
     </option>
   </component>
@@ -141,8 +137,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="574" />
-    <option name="y" value="109" />
+    <option name="x" value="289" />
+    <option name="y" value="80" />
     <option name="width" value="1920" />
     <option name="height" value="987" />
   </component>
@@ -284,15 +280,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1526516369968</updated>
-      <workItem from="1526579344508" duration="2079000" />
+      <workItem from="1526579344508" duration="2286000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2079000" />
+    <option name="totallyTimeSpent" value="2286000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="574" y="109" width="1920" height="987" extended-state="0" />
+    <frame x="289" y="80" width="1920" height="987" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -373,14 +369,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Log.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Database.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -432,6 +420,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="16" column="31" lean-forward="false" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Log.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="69" lean-forward="false" selection-start-line="12" selection-start-column="69" selection-end-line="12" selection-end-column="69" />
           <folding />
         </state>
       </provider>
