@@ -7,9 +7,9 @@ public class TeacherRecord extends Records implements Serializable {
     private String specialiazation;
     private String location;
 
-    public TeacherRecord(String firstName, String lastName, String address, int phone, String specialiazation, String location) {
+    public TeacherRecord(String firstName, String lastName,String recordID, String address, int phone, String specialiazation, String location) {
 
-        super(firstName, lastName);
+        super(firstName, lastName,recordID);
         this.address = address;
         this.phone = phone;
         this.specialiazation = specialiazation;
