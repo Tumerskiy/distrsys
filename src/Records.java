@@ -4,12 +4,11 @@ import java.util.ArrayList;
 public  class  Records implements Serializable {
     private String firstName;
     private String lastName;
-    private String recordID;
+    protected String recordID;
 
-    public Records(String firstName, String lastName,String recordID) {
+    public Records(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.recordID = recordID;
     }
 
     public String getFirstName() {

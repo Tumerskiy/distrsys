@@ -11,8 +11,8 @@ public class StudentRecord extends Records implements Serializable {
         return coursesRegistered;
     }
 
-    public void addCoursesRegistered(String coursesRegistered) {
-        this.coursesRegistered.add(coursesRegistered);
+    public void setCoursesRegistered(ArrayList<String> coursesRegistered) {
+        this.coursesRegistered = coursesRegistered;
     }
 
     public String getStatus() {
@@ -33,7 +33,7 @@ public class StudentRecord extends Records implements Serializable {
 
     public StudentRecord(String firstName, String lastName,String recordID, String coursesRegistered, String status, String statusDate) {
 
-        super(firstName, lastName,recordID);
+        super(firstName, lastName);
         this.coursesRegistered.add(coursesRegistered);
         this.status = status;
         this.statusDate = statusDate;
