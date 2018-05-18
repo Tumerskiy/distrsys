@@ -31,8 +31,7 @@ public class StudentRecord extends Records implements Serializable {
         this.statusDate = statusDate;
     }
 
-    public StudentRecord(String firstName, String lastName,String recordID, String coursesRegistered, String status, String statusDate) {
-
+    public StudentRecord(String firstName, String lastName, String coursesRegistered, String status, String statusDate) {
         super(firstName, lastName);
         this.coursesRegistered.add(coursesRegistered);
         this.status = status;

@@ -9,6 +9,7 @@ public  class  Records implements Serializable {
     public Records(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+//        this.recordID = recordID;
     }
 
     public String getFirstName() {
