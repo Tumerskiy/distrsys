@@ -1,4 +1,9 @@
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,13 +13,26 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
-    private static ConcurrentHashMap<Character,ArrayList<Records>> database = new ConcurrentHashMap<>();
+    protected   ConcurrentHashMap<Character,ArrayList<Records>> database = new ConcurrentHashMap<>();
+    private static Registry centerRegistry;
+
+    static {
+        try {
+            centerRegistry = LocateRegistry.getRegistry();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     public CenterSystem() throws RemoteException {
         super();
     }
 
-    public void createTRecord(String managerId,String firstName, String lastName, String address, int phone, String specialization, String location) throws RemoteException {
+    public ConcurrentHashMap<Character, ArrayList<Records>> getDatabase() {
+        return database;
+    }
+
+    public void createTRecord(String managerId, String firstName, String lastName, String address, int phone, String specialization, String location) throws RemoteException {
         TeacherRecord teacherRecord = new TeacherRecord(firstName,lastName,address,phone,specialization,location);
         char key = lastName.charAt(0);
         if(database.get(key)==null){
@@ -57,13 +75,105 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 //    }
 
 //    @Override
-    public int getRecordCounts(String managerId) throws RemoteException {
-        return 0;
+    public int[] getRecordCounts(String managerId) throws RemoteException {
+        int[] result = {0,0,0};
+        String[] serversName = centerRegistry.list();
+
+        if (managerId.charAt(0) == 'M'){
+            for (Character character : database.keySet()) {
+                result[0] += database.get(character).size();
+            }
+            CenterSystem laval = null;
+            try {
+                laval = (CenterSystem) Naming.lookup("LVL");
+            } catch (NotBoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            for (Character character : laval.getDatabase().keySet()) {
+                result[1] += database.get(character).size();
+            }
+            CenterSystem dollardDesOrmeaux = null;
+            try {
+                dollardDesOrmeaux = (CenterSystem) Naming.lookup("DDO");
+            } catch (NotBoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            for (Character character : dollardDesOrmeaux.getDatabase().keySet()) {
+                result[2] += database.get(character).size();
+            }
+
+        }else if (managerId.charAt(0) == 'L'){
+            for (Character character : database.keySet()) {
+                result[1] += database.get(character).size();
+            }
+            CenterSystem montreal = null;
+            try {
+                montreal = (CenterSystem) Naming.lookup("MTL");
+            } catch (NotBoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            for (Character character : montreal.getDatabase().keySet()) {
+                result[0] += database.get(character).size();
+            }
+            CenterSystem dollardDesOrmeaux = null;
+            try {
+                dollardDesOrmeaux = (CenterSystem) Naming.lookup("DDO");
+            } catch (NotBoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            for (Character character : dollardDesOrmeaux.getDatabase().keySet()) {
+                result[2] += database.get(character).size();
+            }
+
+        }else if (managerId.charAt(0) == 'D'){
+            for (Character character : database.keySet()) {
+                result[2] += database.get(character).size();
+            }
+            CenterSystem montreal = null;
+            try {
+                montreal = (CenterSystem) Naming.lookup("MTL");
+            } catch (NotBoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            for (Character character : montreal.getDatabase().keySet()) {
+                result[0] += database.get(character).size();
+            }
+            CenterSystem laval = null;
+            try {
+                laval = (CenterSystem) Naming.lookup("LVL");
+            } catch (NotBoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            for (Character character : laval.getDatabase().keySet()) {
+                result[1] += database.get(character).size();
+            }
+        }
+        return result;
     }
 
 //    @Override
     public void editRecord(String managerId,String recordID, String fieldName, String newValue) throws RemoteException {
 
+    }
+
+    public static void registry(String name,CenterSystem centerSystem){
+        try {
+            centerRegistry.rebind(name,centerSystem);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
 //    public static void main(String[] args) {
