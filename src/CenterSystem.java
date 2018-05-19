@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
@@ -63,14 +64,41 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
     }
 
-    public int[] getRecordCounts(String managerId) throws RemoteException {
-        int [] test = new int[5];
-        return test;
+    public String getRecordCounts(String managerId) throws RemoteException {
+        HashMap<String,Integer> hashMap = new HashMap<>();
+        String result = "";
+        String[] serversName = centerRegistry.list();
+        for (String name : serversName) {
+
+            if (name.charAt(0) == managerId.charAt(0)){
+                hashMap.put(name,this.getLocalRecordCount());
+            }else {
+                CenterSystem centerSystem = null;
+                try {
+                    centerSystem = (CenterSystem) Naming.lookup(name);
+                } catch (NotBoundException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                hashMap.put(name,centerSystem.getLocalRecordCount());
+            }
+        }
+        for (String s : hashMap.keySet()) {
+            result += s + ":" + hashMap.get(s) + "  ";
+        }
+
+
+        return result;
     }
 
     //for test purposes
     public int getLocalRecordCount() throws RemoteException{
-        return 8;
+        int count = 0;
+        for (Character character : database.keySet()) {
+            count += database.get(character).size();
+        }
+        return count;
     }
 //    @Override
 //    public int[] getRecordCounts(String managerId) throws RemoteException {
