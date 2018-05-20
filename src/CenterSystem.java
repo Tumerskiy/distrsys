@@ -46,6 +46,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             value.add(teacherRecord);
             database.put(key, value);
         }
+        Log.log(Log.getCurrentTime(),centerName,managerId,"createTRecord","Successful");
     }
 
     public void createSRecord(String managerId,String firstName, String lastName, String courseRegistered, String status, String statusDate) throws RemoteException {
@@ -60,6 +61,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             value.add(studentRecord);
             database.put(key, value);
         }
+        Log.log(Log.getCurrentTime(),centerName,managerId,"createSRecord","Successful");
     }
 
     public String getRecordCounts(String managerId) throws Exception {
@@ -70,6 +72,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             CenterServer curServer = (CenterServer) registry.lookup(server);
             result += server + ":" + curServer.getLocalRecordCount() + " ";
         }
+        Log.log(Log.getCurrentTime(),centerName,managerId,"getRecordCounts","Successful");
         return result;
     }
 
