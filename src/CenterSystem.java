@@ -1,24 +1,19 @@
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
+import java.beans.BeanInfo;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
+import java.beans.Introspector;
+import java.beans.Statement;
+import java.beans.PropertyDescriptor;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     protected  ConcurrentHashMap<Character,ArrayList<Records>> database = new ConcurrentHashMap<>();
     private static Registry centerRegistry;
 
-    /*
-    Agreed with this one, since we do LocateRegistry we can keep it here and have it static.
-     */
     static {
         try {
             centerRegistry = LocateRegistry.getRegistry();
@@ -29,10 +24,6 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     public CenterSystem() throws RemoteException {
         super();
-    }
-
-    public ConcurrentHashMap<Character, ArrayList<Records>> getDatabase() {
-        return this.database;
     }
 
     public void createTRecord(String managerId, String firstName, String lastName, String address, int phone, String specialization, String location) throws RemoteException {
@@ -63,125 +54,45 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
     }
 
-    public int[] getRecordCounts(String managerId) throws RemoteException {
-        int [] test = new int[5];
-        return test;
-    }
-
-    //for test purposes
-    public int getLocalRecordCount() throws RemoteException{
-        return 8;
-    }
-//    @Override
-//    public int[] getRecordCounts(String managerId) throws RemoteException {
-//        int[] result = {0,0,0};
-//        String[] serversName = centerRegistry.list();
-//
-//        if (managerId.charAt(0) == 'M'){
-//            for (Character character : database.keySet()) {
-//                result[0] += database.get(character).size();
-//            }
-//            CenterSystem laval = null;
-//            try {
-//                laval = (CenterSystem) Naming.lookup("LVL");
-//            } catch (NotBoundException e) {
-//                e.printStackTrace();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//            for (Character character : laval.getDatabase().keySet()) {
-//                result[1] += database.get(character).size();
-//            }
-//            CenterSystem dollardDesOrmeaux = null;
-//            try {
-//                dollardDesOrmeaux = (CenterSystem) Naming.lookup("DDO");
-//            } catch (NotBoundException e) {
-//                e.printStackTrace();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//            for (Character character : dollardDesOrmeaux.getDatabase().keySet()) {
-//                result[2] += database.get(character).size();
-//            }
-//
-//        }else if (managerId.charAt(0) == 'L'){
-//            for (Character character : database.keySet()) {
-//                result[1] += database.get(character).size();
-//            }
-//            CenterSystem montreal = null;
-//            try {
-//                montreal = (CenterSystem) Naming.lookup("MTL");
-//            } catch (NotBoundException e) {
-//                e.printStackTrace();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//            for (Character character : montreal.getDatabase().keySet()) {
-//                result[0] += database.get(character).size();
-//            }
-//            CenterSystem dollardDesOrmeaux = null;
-//            try {
-//                dollardDesOrmeaux = (CenterSystem) Naming.lookup("DDO");
-//            } catch (NotBoundException e) {
-//                e.printStackTrace();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//            for (Character character : dollardDesOrmeaux.getDatabase().keySet()) {
-//                result[2] += database.get(character).size();
-//            }
-//
-//        }else if (managerId.charAt(0) == 'D'){
-//            for (Character character : database.keySet()) {
-//                result[2] += database.get(character).size();
-//            }
-//            CenterSystem montreal = null;
-//            try {
-//                montreal = (CenterSystem) Naming.lookup("MTL");
-//            } catch (NotBoundException e) {
-//                e.printStackTrace();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//            for (Character character : montreal.getDatabase().keySet()) {
-//                result[0] += database.get(character).size();
-//            }
-//            CenterSystem laval = null;
-//            try {
-//                laval = (CenterSystem) Naming.lookup("LVL");
-//            } catch (NotBoundException e) {
-//                e.printStackTrace();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//            for (Character character : laval.getDatabase().keySet()) {
-//                result[1] += database.get(character).size();
-//            }
-//        }
-//        return result;
-//    }
-
-//    @Override
-    public void editRecord(String managerId,String recordID, String fieldName, String newValue) throws RemoteException {
-
-    }
-
-    public static void registry(String name,CenterSystem centerSystem){
-        try {
-            centerRegistry.rebind(name,centerSystem);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+    public String getRecordCounts(String managerId) throws Exception {
+        String result = "";
+        Registry registry = LocateRegistry.getRegistry();
+        String[] servers = registry.list();
+        for (String server : servers) {
+            CenterServer curServer = (CenterServer) registry.lookup(server);
+            result += server + ":" + curServer.getLocalRecordCount() + " ";
         }
+        return result;
     }
 
-//    public static void main(String[] args) {
-//        if (System.getSecurityManager() == null){
-//            System.setSecurityManager(new SecurityManager());
-//        }
-//        try{
-//
-//        }catch (Exception e){
-//
-//        }
-//    }
+    public int getLocalRecordCount() throws RemoteException{
+        return this.database.size();
+    }
+
+    public String editRecord(String managerId,String recordID, String fieldName, String newValue) throws Exception {
+        String result = "";
+
+        for (char key : database.keySet()){
+            for (Records record : database.get(key)){
+                if (record.getRecordID().equals(recordID)){
+                    BeanInfo recordInfo = Introspector.getBeanInfo(record.getClass());
+                    PropertyDescriptor[] recordPds = recordInfo.getPropertyDescriptors();
+                    for (PropertyDescriptor prop : recordPds){
+                        if (prop.getName().equals(fieldName)){
+                            Statement stmt = new Statement(record, prop.getWriteMethod().getName(), new Object[]{newValue});
+                            stmt.execute();
+                            result = "Record updated";
+                            return result;
+                        }
+                        else{
+                            result = "fieldName doesn't match record type";
+                        }
+                    }
+
+                }
+            }
+        }
+        return  result;
+    }
+
 }

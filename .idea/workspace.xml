@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c48a1d7e-6362-4b6a-89a8-4e1fc1a7d72a" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CenterServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CenterServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CenterSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CenterSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MTLServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MTLServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Records.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Records.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,11 +19,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Records.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Records.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret lean-forward="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="CenterServer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CenterServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="90">
+              <caret line="7" column="106" lean-forward="true" selection-start-line="7" selection-start-column="106" selection-end-line="7" selection-end-column="106" />
             </state>
           </provider>
         </entry>
@@ -34,8 +40,8 @@
       <file leaf-file-name="test.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+            <state relative-caret-position="120">
+              <caret line="8" column="57" lean-forward="true" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="57" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -46,12 +52,10 @@
       <file leaf-file-name="CenterSystem.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CenterSystem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="71" column="59" selection-start-line="71" selection-start-column="59" selection-end-line="71" selection-end-column="59" />
+            <state relative-caret-position="288">
+              <caret line="82" column="112" selection-start-line="82" selection-start-column="112" selection-end-line="82" selection-end-column="112" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#962#963#0" expanded="true" />
-                <element signature="e#993#994#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -60,8 +64,8 @@
       <file leaf-file-name="MTLServer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MTLServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+            <state relative-caret-position="60">
+              <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -73,7 +77,10 @@
         <entry file="file://$PROJECT_DIR$/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+              <caret line="12" column="66" lean-forward="true" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="66" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -119,13 +126,13 @@
         <option value="$PROJECT_DIR$/src/ManagerRepositry.java" />
         <option value="$PROJECT_DIR$/src/CenterRepositry.java" />
         <option value="$PROJECT_DIR$/src/TeacherRecord.java" />
-        <option value="$PROJECT_DIR$/src/Records.java" />
         <option value="$PROJECT_DIR$/src/StudentRecord.java" />
         <option value="$PROJECT_DIR$/src/MTLClient.java" />
         <option value="$PROJECT_DIR$/src/MTLServer.java" />
         <option value="$PROJECT_DIR$/src/test.java" />
-        <option value="$PROJECT_DIR$/src/CenterServer.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
+        <option value="$PROJECT_DIR$/src/Records.java" />
+        <option value="$PROJECT_DIR$/src/CenterServer.java" />
         <option value="$PROJECT_DIR$/src/CenterSystem.java" />
       </list>
     </option>
@@ -137,6 +144,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="683" />
     <option name="width" value="683" />
     <option name="height" value="744" />
   </component>
@@ -173,13 +181,7 @@
               <item name="proj" type="b2602c69:ProjectViewProjectNode" />
               <item name="proj" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="CenterServer" type="1a9f42e2:ClassTreeNode" />
-            </path>
-            <path>
-              <item name="proj" type="b2602c69:ProjectViewProjectNode" />
-              <item name="proj" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="CenterSystem" type="1a9f42e2:ClassTreeNode" />
+              <item name="StudentRecord" type="1a9f42e2:ClassTreeNode" />
             </path>
           </expand>
           <select />
@@ -308,7 +310,7 @@
     <option name="totallyTimeSpent" value="7342000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1366" height="744" extended-state="6" />
+    <frame x="683" y="0" width="683" height="744" extended-state="4" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -325,7 +327,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -419,6 +421,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -428,8 +433,6 @@
           <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#962#963#0" expanded="true" />
-            <element signature="e#993#994#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -457,8 +460,6 @@
           <caret line="4" column="34" lean-forward="true" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#962#963#0" expanded="true" />
-            <element signature="e#993#994#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -514,8 +515,6 @@
           <caret line="18" column="8" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#962#963#0" expanded="true" />
-            <element signature="e#993#994#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -541,8 +540,6 @@
           <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#962#963#0" expanded="true" />
-            <element signature="e#993#994#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -572,13 +569,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Records.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="8" column="52" selection-start-line="8" selection-start-column="52" selection-end-line="8" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/MTLClient.java" />
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_102.jdk/Contents/Home/src.zip!/java/rmi/registry/Registry.java" />
     <entry file="file://$PROJECT_DIR$/src/CenterRepositry.java">
@@ -588,10 +578,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="66" lean-forward="true" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="66" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Records.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+        <state relative-caret-position="120">
+          <caret line="8" column="57" lean-forward="true" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="57" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -600,36 +607,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CenterServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="90">
+          <caret line="7" column="106" lean-forward="true" selection-start-line="7" selection-start-column="106" selection-end-line="7" selection-end-column="106" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/MTLServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+        <state relative-caret-position="60">
+          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/CenterSystem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="71" column="59" selection-start-line="71" selection-start-column="59" selection-end-line="71" selection-end-column="59" />
+        <state relative-caret-position="288">
+          <caret line="82" column="112" selection-start-line="82" selection-start-column="112" selection-end-line="82" selection-end-column="112" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#962#963#0" expanded="true" />
-            <element signature="e#993#994#0" expanded="true" />
           </folding>
         </state>
       </provider>
