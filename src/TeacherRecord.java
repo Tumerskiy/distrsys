@@ -16,6 +16,9 @@ public class TeacherRecord extends Records implements Serializable {
         this.location = location;
     }
 
+    public TeacherRecord() {
+    }
+
     public String getAddress() {
         return address;
     }

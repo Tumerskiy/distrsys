@@ -12,6 +12,9 @@ public  class  Records implements Serializable {
 //        this.recordID = recordID;
     }
 
+    public Records() {
+    }
+
     public String getFirstName() {
         return firstName;
     }

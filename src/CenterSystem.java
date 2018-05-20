@@ -36,7 +36,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return this.database;
     }
 
-    public void createTRecord(String managerId, String firstName, String lastName, String address, int phone, String specialization, String location) throws RemoteException {
+    public void createTRecord(String firstName, String lastName, String address, int phone, String specialization, String location) throws RemoteException {
         TeacherRecord teacherRecord = new TeacherRecord(firstName,lastName,address,phone,specialization,location);
         char key = lastName.charAt(0);
         if(database.get(key)==null){
@@ -50,7 +50,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
     }
 
-    public void createSRecord(String managerId,String firstName, String lastName, String courseRegistered, String status, String statusDate) throws RemoteException {
+    public void createSRecord(String firstName, String lastName, ArrayList<String> courseRegistered, String status, String statusDate) throws RemoteException {
         StudentRecord studentRecord = new StudentRecord(firstName,lastName, courseRegistered, status, statusDate);
         char key = lastName.charAt(0);
         if(database.get(key)==null){
@@ -190,7 +190,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 //    }
 
 //    @Override
-    public void editRecord(String managerId,String recordID, String fieldName, String newValue) throws RemoteException {
+    public void editRecord(String recordID, String fieldName, String newValue) throws RemoteException {
 
     }
 
