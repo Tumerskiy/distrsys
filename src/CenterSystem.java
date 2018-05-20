@@ -71,6 +71,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     public String editRecord(String managerId,String recordID, String fieldName, String newValue) throws Exception {
         String result = "";
+        Boolean ableModified = false;
 
         for (char key : database.keySet()){
             for (Records record : database.get(key)){
@@ -87,6 +88,9 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                     PropertyDescriptor[] recordPds = recordInfo.getPropertyDescriptors();
                     for (PropertyDescriptor prop : recordPds){
                         if (prop.getName().equals(fieldName)){
+                            if (fieldName.equals("location")){
+                                ableModified = newValue.equals("MTL") || newValue.equals("LVL") || newValue.equals("DDO");
+                            }
                             /*
                             Here we form the statement to execute, in our case, update the field in the object.
                             We rely on property names captured in previous recordPds. There is no need in explicit definition
@@ -98,10 +102,12 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
                             * look into java reflection and java beans library.
                              */
-                            Statement stmt = new Statement(record, prop.getWriteMethod().getName(), new Object[]{newValue});
-                            stmt.execute();
-                            result = "Record updated";
-                            return result;
+                            if (ableModified) {
+                                Statement stmt = new Statement(record, prop.getWriteMethod().getName(), new Object[]{newValue});
+                                stmt.execute();
+                                result = "Record updated";
+                                return result;
+                            }
                         }
                         else{
                             result = "fieldName doesn't match record type";
