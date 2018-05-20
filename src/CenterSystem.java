@@ -75,10 +75,29 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         for (char key : database.keySet()){
             for (Records record : database.get(key)){
                 if (record.getRecordID().equals(recordID)){
+                    /* following reads information about the object, more precisely of its class, into BeanInfo
+                     not sure if in this particular case it will get proper specific class of record, eg StudentRecord or
+                     Teacher record, it could take its superclass Record...
+                    */
                     BeanInfo recordInfo = Introspector.getBeanInfo(record.getClass());
+
+                    /*
+                    recordPds in this case is the array of properties available in this class
+                     */
                     PropertyDescriptor[] recordPds = recordInfo.getPropertyDescriptors();
                     for (PropertyDescriptor prop : recordPds){
                         if (prop.getName().equals(fieldName)){
+                            /*
+                            Here we form the statement to execute, in our case, update the field in the object.
+                            We rely on property names captured in previous recordPds. There is no need in explicit definition
+                            of particular Student of TeacherRecord class, since we can just analyze whatever record found
+                            with recordId.
+                            prop.getWriteMethod() looks for method which writes to property, which was filtered with previous
+                            prop.getName().equals(fieldName). As a result newValue is passed as argument to method found, hopefully,
+                            it is the proper setter in the end.
+
+                            * look into java reflection and java beans library.
+                             */
                             Statement stmt = new Statement(record, prop.getWriteMethod().getName(), new Object[]{newValue});
                             stmt.execute();
                             result = "Record updated";
