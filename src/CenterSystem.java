@@ -1,4 +1,4 @@
-import java.beans.BeanInfo;
+import java.beans.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -8,14 +8,12 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
-import java.beans.Introspector;
-import java.beans.Statement;
-import java.beans.PropertyDescriptor;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private String centerName = "";
     protected  ConcurrentHashMap<Character,ArrayList<Records>> database = new ConcurrentHashMap<>();
     private static Registry centerRegistry;
+    private static int randomId=9999;
 
     static {
         try {
@@ -39,6 +37,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     public void createTRecord(String managerId, String firstName, String lastName, String address, int phone, String specialization, String location) throws RemoteException {
         TeacherRecord teacherRecord = new TeacherRecord(firstName,lastName,address,phone,specialization,location);
+        teacherRecord.setRecordID("TR"+String.valueOf(++randomId));
         char key = lastName.charAt(0);
         if(database.get(key)==null){
             ArrayList<Records> value =  new ArrayList<>();
@@ -52,8 +51,9 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         Log.log(Log.getCurrentTime(),centerName,managerId,"createTRecord","Successful");
     }
 
-    public void createSRecord(String managerId,String firstName, String lastName, String courseRegistered, String status, String statusDate) throws RemoteException {
+    public void createSRecord(String managerId, String firstName, String lastName, ArrayList<String> courseRegistered, String status, String statusDate) throws RemoteException {
         StudentRecord studentRecord = new StudentRecord(firstName,lastName, courseRegistered, status, statusDate);
+        studentRecord.setRecordID("SR"+String.valueOf(++randomId));
         char key = lastName.charAt(0);
         if(database.get(key)==null){
             ArrayList<Records> value =  new ArrayList<>();
@@ -67,7 +67,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         Log.log(Log.getCurrentTime(),centerName,managerId,"createSRecord","Successful");
     }
 
-    public String getRecordCounts(String managerId) throws Exception {
+    public String getRecordCounts(String managerId) throws RemoteException, NotBoundException {
         String result = "";
         Registry registry = LocateRegistry.getRegistry();
         String[] servers = registry.list();
@@ -134,8 +134,6 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                     result = "fieldName doesn't match record type";
                     String operation = "edit: " + fieldName;
                     Log.log(Log.getCurrentTime(),centerName,managerId,operation,"Failed");
-
-
                 }
             }
         }
