@@ -34,6 +34,7 @@ public  class  Records implements Serializable {
     public String getRecordID() {
         return recordID;
     }
+
     public void setRecordID(String recordID) {
         this.recordID = recordID;
     }
