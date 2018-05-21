@@ -1,7 +1,4 @@
-import com.sun.tools.internal.ws.processor.ProcessorException;
-
-import javax.annotation.processing.Processor;
-import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -25,8 +22,7 @@ public class Client {
 
         /*
         TODO:
-        1. Figure out how to create log for each manager
-        2. Figure out how to simulate several managers use the server concurrently.
+         Figure out how to simulate several managers use the server concurrently.
          */
         new Client().scan();
     }
@@ -35,33 +31,36 @@ public class Client {
         Registry registry = LocateRegistry.getRegistry();
         CenterServer stub;
         String managerId = "";
-        boolean ifContinue = false;
+        boolean ifContinue = true;
         do {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Please input your manager ID:");
             managerId = scanner.nextLine();
-            verifyId(managerId);
+            if (!verifyId(managerId)) {
+                System.out.println("ManagerId error. Please input again");
+                continue;
+            }
             switch (managerId.substring(0, 3)) {
                 case "MTL": {
                     stub = (CenterServer) registry.lookup("MTL");
-                    ifContinue = processOpt(stub);
+                    ifContinue = processOperation(stub,managerId);
                     break;
                 }
                 case "LVL": {
                     stub = (CenterServer) registry.lookup("LVL");
-                    ifContinue = processOpt(stub);
+                    ifContinue = processOperation(stub,managerId);
                     break;
                 }
                 case "DDO": {
                     stub = (CenterServer) registry.lookup("DDO");
-                    ifContinue = processOpt(stub);
+                    ifContinue = processOperation(stub,managerId);
                     break;
                 }
             }
         } while (ifContinue);
     }
 
-    public boolean processOpt(CenterServer stub) throws Exception {
+    public boolean processOperation(CenterServer stub, String managerId) throws Exception {
         Scanner scanner = new Scanner(System.in);
         int option = -1;
         System.out.println("Please select your operation:");
@@ -73,19 +72,19 @@ public class Client {
         option = scanner.nextInt();
         switch (option) {
             case 1: {
-                processOpt1(stub);
+                createTRecord(stub,managerId);
                 break;
             }
             case 2: {
-                processOpt2(stub);
+                createSRecord(stub,managerId);
                 break;
             }
             case 3: {
-                System.out.println(processOpt3(stub));
+                getRecordCounts(stub,managerId);
                 break;
             }
             case 4: {
-                processOpt4(stub);
+                editRecord(stub, managerId);
                 break;
             }
             case 5: {
@@ -97,7 +96,7 @@ public class Client {
         else return true;
     }
 
-    public void processOpt1(CenterServer stub) throws RemoteException {
+    public void createTRecord(CenterServer stub, String managerId) throws RemoteException {
         Scanner scanner = new Scanner(System.in);
         TeacherRecord teacher = new TeacherRecord();
         System.out.println("Please input teacher's first name:");
@@ -112,10 +111,10 @@ public class Client {
         teacher.setLocation(scanner.nextLine().trim());
         System.out.println("Please input teacher's phone:");
         teacher.setPhone(scanner.nextInt());
-        stub.createTRecord(teacher.getFirstName(), teacher.getLastName(), teacher.getAddress(), teacher.getPhone(), teacher.getSpecialiazation(), teacher.getLocation());
+        stub.createTRecord(managerId, teacher.getFirstName(), teacher.getLastName(), teacher.getAddress(), teacher.getPhone(), teacher.getSpecialiazation(), teacher.getLocation());
     }
 
-    public void processOpt2(CenterServer stub) throws RemoteException {
+    public void createSRecord(CenterServer stub, String managerId) throws RemoteException {
         Scanner scanner = new Scanner(System.in);
         StudentRecord student = new StudentRecord();
         System.out.println("Please input student's first name:");
@@ -131,16 +130,14 @@ public class Client {
                 scanner.nextLine().split(" ")) {
             student.getCoursesRegistered().add(s);
         }
-        stub.createSRecord(student.getFirstName(), student.getLastName(), student.getCoursesRegistered(), student.getStatus(), student.getStatusDate());
+        stub.createSRecord(managerId, student.getFirstName(), student.getLastName(), student.getCoursesRegistered(), student.getStatus(), student.getStatusDate());
     }
 
-    public int processOpt3(CenterServer stub) {
-        //TODO: We should let this function return int and remove the argument "managerId".
-//        stub.getRecordCounts();
-        return 0;
+    public void getRecordCounts(CenterServer stub, String managerId) throws RemoteException, NotBoundException {
+        System.out.println(stub.getRecordCounts(managerId));
     }
 
-    public void processOpt4(CenterServer stub) throws Exception {
+    public void editRecord(CenterServer stub, String managerId) throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please input your record id:");
         String recordId = scanner.nextLine().trim();
@@ -148,15 +145,16 @@ public class Client {
         String fieldName = scanner.nextLine().trim();
         System.out.println("Please input new value:");
         String newValue = scanner.nextLine().trim();
-        stub.editRecord(recordId, fieldName, newValue);
+        stub.editRecord(managerId, recordId, fieldName, newValue);
     }
 
 
-    public void verifyId(String managerId) throws Exception {
+    public boolean verifyId(String managerId) throws Exception {
         String addr = managerId.substring(0, 3);
         if (addr.equals("MTL") || addr.equals("LVL") || addr.equals("DDO")) {
+            return true;
         } else {
-            throw new Exception("managerId error");
+            return false;
         }
     }
 }
