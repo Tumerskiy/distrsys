@@ -19,6 +19,7 @@ public class UDPClient {
                     DatagramPacket replayByte = new DatagramPacket(buffer,buffer.length);
                     datagramSocket.receive(replayByte);
                     receivedInfor = new String(replayByte.getData());
+                    datagramSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -27,6 +28,9 @@ public class UDPClient {
             }
         } catch (SocketException e) {
             e.printStackTrace();
+        }
+        finally {
+            datagramSocket.close();
         }
         return receivedInfor;
     }

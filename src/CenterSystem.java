@@ -12,8 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private String centerName = "";
     protected  ConcurrentHashMap<Character,ArrayList<Records>> database = new ConcurrentHashMap<>();
+    private UDPServer udpServer;
     private static Registry centerRegistry;
     private static int randomId=9999;
+    private int portNumber;
 
     static {
         try {
@@ -23,8 +25,25 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
     }
 
+    public int getPortNumber() {
+        return portNumber;
+    }
+
+    public void setPortNumber(int portNumber) {
+        this.portNumber = portNumber;
+    }
+
     public CenterSystem() throws RemoteException {
         super();
+    }
+
+    public UDPServer getUdpServer() {
+        return udpServer;
+    }
+
+    public void setUdpServer(UDPServer udpServer) {
+        this.udpServer = udpServer;
+        new Thread(udpServer).start();
     }
 
     public String getCenterName() {
@@ -79,6 +98,19 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return result;
     }
 
+
+    public String getRecordCountsbyUDP(String managerId) throws RemoteException, NotBoundException {
+        String result = "";
+        if (managerId.charAt(0) == 'M'){
+            result += "MTL:" + this.getLocalRecordCount() + ",LVD:" + UDPClient.request("LVL",1099) +",DDO:" +UDPClient.request("DDO",1099);
+        }else if (managerId.charAt(0) == 'L'){
+            result += "MTL:" + this.getLocalRecordCount() + ",LVD:" + this.getLocalRecordCount() +",DDO:" +UDPClient.request("DDO",1099);
+        }else if(managerId.charAt(0) == 'D'){
+            result += "MTL:" + UDPClient.request("MTL",1099) + ",LVD:" + UDPClient.request("LVL",1099) +",DDO:" +this.getLocalRecordCount();
+        }
+        Log.log(Log.getCurrentTime(),centerName,managerId,"getRecordCounts","Successful");
+        return result;
+    }
     public int getLocalRecordCount() throws RemoteException{
         return this.database.size();
     }
