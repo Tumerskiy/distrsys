@@ -13,6 +13,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private String centerName = "";
     protected  ConcurrentHashMap<Character,ArrayList<Records>> database = new ConcurrentHashMap<>();
     private static Registry centerRegistry;
+    private static int randomId=9999;
 
     static {
         try {
@@ -36,6 +37,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     public void createTRecord(String managerId, String firstName, String lastName, String address, int phone, String specialization, String location) throws RemoteException {
         TeacherRecord teacherRecord = new TeacherRecord(firstName,lastName,address,phone,specialization,location);
+        teacherRecord.setRecordID("TR"+String.valueOf(++randomId));
         char key = lastName.charAt(0);
         if(database.get(key)==null){
             ArrayList<Records> value =  new ArrayList<>();
@@ -51,6 +53,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     public void createSRecord(String managerId, String firstName, String lastName, ArrayList<String> courseRegistered, String status, String statusDate) throws RemoteException {
         StudentRecord studentRecord = new StudentRecord(firstName,lastName, courseRegistered, status, statusDate);
+        studentRecord.setRecordID("SR"+String.valueOf(++randomId));
         char key = lastName.charAt(0);
         if(database.get(key)==null){
             ArrayList<Records> value =  new ArrayList<>();
@@ -131,8 +134,6 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                     result = "fieldName doesn't match record type";
                     String operation = "edit: " + fieldName;
                     Log.log(Log.getCurrentTime(),centerName,managerId,operation,"Failed");
-
-
                 }
             }
         }
