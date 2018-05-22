@@ -3,6 +3,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 public class Client {
     public static void main(String args[]) throws Exception {
@@ -19,16 +21,25 @@ public class Client {
         probably client should be interactive, and consume input with Scanner
         based on which we should make case{} for called methods
          */
-
-        /*
-        TODO:
-         Figure out how to simulate several managers use the server concurrently.
-         */
-        new Client().scan();
+        
+        for (int i = 0; i <10; i++) {
+            new Client().createManager();
+        }
     }
 
+    public void createManager(){
+        new Thread(() -> {
+            try {
+                scan();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
     public void scan() throws Exception {
-        Registry registry = LocateRegistry.getRegistry();
+        Registry registry = LocateRegistry.getRegistry(2964);
         CenterServer stub;
         String managerId = "";
         boolean ifContinue = true;
