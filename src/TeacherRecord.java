@@ -3,11 +3,11 @@ import java.io.Serializable;
 public class TeacherRecord extends Records implements Serializable {
 
     private String address;
-    private int phone;
+    private String phone;
     private String specialiazation;
     private String location;
 
-    public TeacherRecord(String firstName, String lastName, String address, int phone, String specialiazation, String location) {
+    public TeacherRecord(String firstName, String lastName, String address, String phone, String specialiazation, String location) {
 
         super(firstName, lastName);
         this.address = address;
@@ -16,8 +16,6 @@ public class TeacherRecord extends Records implements Serializable {
         this.location = location;
     }
 
-    public TeacherRecord() {
-    }
 
     public String getAddress() {
         return address;
@@ -27,11 +25,11 @@ public class TeacherRecord extends Records implements Serializable {
         this.address = address;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

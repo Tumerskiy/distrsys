@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class StudentRecord extends Records implements Serializable {
 
-    private ArrayList<String> coursesRegistered = new ArrayList<>();
+    private ArrayList<String> coursesRegistered;
     private String status;
     private String statusDate;
 
@@ -13,9 +13,6 @@ public class StudentRecord extends Records implements Serializable {
 
     public void setCoursesRegistered(ArrayList<String> coursesRegistered) {
         this.coursesRegistered = coursesRegistered;
-    }
-
-    public StudentRecord() {
     }
 
     public String getStatus() {
