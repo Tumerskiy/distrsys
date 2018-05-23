@@ -26,17 +26,6 @@ public class Client {
         new Client().scan();
     }
 
-    public void createManager(){
-        new Thread(() -> {
-            try {
-                scan();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-
     public void scan() throws Exception {
         Registry registry = LocateRegistry.getRegistry("localhost",2000);
         CenterServer stub;
