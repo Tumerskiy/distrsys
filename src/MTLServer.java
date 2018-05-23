@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+=======
+>>>>>>> master
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -11,6 +14,7 @@ public class MTLServer extends CenterSystem {
         CenterSystem server = new CenterSystem();
         Registry registry = LocateRegistry.getRegistry();
         registry.bind("MTL", server);
+        System.out.printf("MTL is launched");
 
     }
 }

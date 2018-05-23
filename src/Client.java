@@ -2,6 +2,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Client {
@@ -98,39 +99,40 @@ public class Client {
 
     public void createTRecord(CenterServer stub, String managerId) throws RemoteException {
         Scanner scanner = new Scanner(System.in);
-        TeacherRecord teacher = new TeacherRecord();
         System.out.println("Please input teacher's first name:");
-        teacher.setFirstName(scanner.nextLine().trim());
+        String firstName = scanner.nextLine().trim();
         System.out.println("Please input teacher's last name:");
-        teacher.setLastName(scanner.nextLine().trim());
+        String lastName = scanner.nextLine().trim();
         System.out.println("Please input teacher's address");
-        teacher.setAddress(scanner.nextLine().trim());
+        String address = scanner.nextLine().trim();
         System.out.println("Please input your teacher's specialization:");
-        teacher.addSpecialiazation(scanner.nextLine().trim());
+        String specialiazation=scanner.nextLine().trim();
         System.out.println("Please input teacher's location:");
-        teacher.setLocation(scanner.nextLine().trim());
+        String location = scanner.nextLine().trim();
         System.out.println("Please input teacher's phone:");
-        teacher.setPhone(scanner.nextInt());
-        stub.createTRecord(managerId, teacher.getFirstName(), teacher.getLastName(), teacher.getAddress(), teacher.getPhone(), teacher.getSpecialiazation(), teacher.getLocation());
+        String phone =  scanner.nextLine();
+        String result=stub.createTRecord(managerId, firstName, lastName, address, phone, specialiazation, location);
+        System.out.println("Teacher record with id: "+result+" was created");
     }
 
     public void createSRecord(CenterServer stub, String managerId) throws RemoteException {
         Scanner scanner = new Scanner(System.in);
-        StudentRecord student = new StudentRecord();
         System.out.println("Please input student's first name:");
-        student.setFirstName(scanner.nextLine().trim());
+        String firstName = scanner.nextLine().trim();
         System.out.println("Please input student's last name:");
-        student.setLastName(scanner.nextLine().trim());
+        String lastName = scanner.nextLine().trim();
         System.out.println("Please input student's status:");
-        student.setStatus(scanner.nextLine().trim());
+        String status = scanner.nextLine().trim();
         System.out.println("Please input your student's statusDate:");
-        student.setStatusDate(scanner.nextLine().trim());
+        String statusDate = scanner.nextLine().trim();
         System.out.println("Please input student's courses(split with space):");
+        ArrayList<String> coursesRegistered = new ArrayList<>();
         for (String s :
                 scanner.nextLine().split(" ")) {
-            student.getCoursesRegistered().add(s);
+            coursesRegistered.add(s);
         }
-        stub.createSRecord(managerId, student.getFirstName(), student.getLastName(), student.getCoursesRegistered(), student.getStatus(), student.getStatusDate());
+        String result = stub.createSRecord(managerId, firstName, lastName, coursesRegistered, status, statusDate);
+        System.out.println("Student record with id: "+result+" was created");
     }
 
     public void getRecordCounts(CenterServer stub, String managerId) throws RemoteException, NotBoundException {
@@ -145,7 +147,9 @@ public class Client {
         String fieldName = scanner.nextLine().trim();
         System.out.println("Please input new value:");
         String newValue = scanner.nextLine().trim();
-        stub.editRecord(managerId, recordId, fieldName, newValue);
+        String result = stub.editRecord(managerId, recordId, fieldName, newValue);
+        System.out.printf(result+"\n");
+
     }
 
 
