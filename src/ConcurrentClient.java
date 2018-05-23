@@ -6,7 +6,6 @@ import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
-
 public class ConcurrentClient {
     public static void main(String[] args) throws Exception {
         new ConcurrentClient().scan();

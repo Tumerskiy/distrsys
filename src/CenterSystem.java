@@ -64,7 +64,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                 database.put(key, value);
             }
         }
-        Log.log(Log.getCurrentTime(), centerName, managerId, "createTRecord", "Successful");
+        Log.log(Log.getCurrentTime(), managerId, "createTRecord", "Create successfully! Record ID is "+teacherRecord.getRecordID());
         return teacherRecord.getRecordID();
     }
 
@@ -81,7 +81,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             value.add(studentRecord);
             database.put(key, value);
         }
-        Log.log(Log.getCurrentTime(), centerName, managerId, "createSRecord", "Successful");
+        Log.log(Log.getCurrentTime(), managerId, "createSRecord", "Create successfully! Record ID is "+studentRecord.getRecordID());
         return studentRecord.getRecordID();
     }
 
@@ -93,7 +93,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             CenterServer curServer = (CenterServer) registry.lookup(server);
             result += server + ":" + curServer.getLocalRecordCount() + " ";
         }
-        Log.log(Log.getCurrentTime(), centerName, managerId, "getRecordCounts", "Successful");
+        Log.log(Log.getCurrentTime(), managerId, "getRecordCounts", result);
         return result;
     }
 
@@ -144,21 +144,23 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                                 stmt.execute();
                                 result = "Record updated";
                                 String operation = "edit: " + prop.getName();
-                                Log.log(Log.getCurrentTime(), centerName, managerId, operation, "Successful");
+                                Log.log(Log.getCurrentTime(), managerId, operation, result);
                                 return result;
                             } else {
                                 String operation = "edit: " + prop.getName();
-                                Log.log(Log.getCurrentTime(), centerName, managerId, operation, "Failed");
-                                return result = "The newValue is not valid!";
+                                result = "The newValue is not valid!";
+                                Log.log(Log.getCurrentTime(), managerId, operation, result);
+                                return result;
                             }
                         }
 
                     }
                     result = "fieldName doesn't match record type";
                     String operation = "edit: " + fieldName;
-                    Log.log(Log.getCurrentTime(), centerName, managerId, operation, "Failed");
+                    Log.log(Log.getCurrentTime(), managerId, operation, result);
                 } else{
                     result = "No such record Id for this manager";
+                    Log.log(Log.getCurrentTime(), managerId, "edit: " + fieldName, result);
                 }
             }
         }
