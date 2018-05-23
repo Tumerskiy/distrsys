@@ -17,14 +17,13 @@ public class ConcurrentClient {
         InputStreamReader reader=new InputStreamReader(new FileInputStream(file));
         BufferedReader input=new BufferedReader(reader);
         String line=input.readLine();
+        Registry registry= LocateRegistry.getRegistry("localhost", 2000);
         while (line!=null){
             String[] parameters=line.split("\\|");
             if (!verifyId(parameters[0])){
                 line=input.readLine();
                 continue;
             }
-
-            Registry registry= LocateRegistry.getRegistry("localhost", 2000);
             CenterServer stub=(CenterServer) registry.lookup(parameters[0].substring(0,3));
             CompletableFuture<String> result;
             switch (parameters[1]) {
