@@ -23,9 +23,7 @@ public class Client {
         based on which we should make case{} for called methods
          */
         
-        for (int i = 0; i <10; i++) {
-            new Client().createManager();
-        }
+        new Client().scan();
     }
 
     public void createManager(){
@@ -40,7 +38,7 @@ public class Client {
 
 
     public void scan() throws Exception {
-        Registry registry = LocateRegistry.getRegistry(2964);
+        Registry registry = LocateRegistry.getRegistry("localhost",2000);
         CenterServer stub;
         String managerId = "";
         boolean ifContinue = true;

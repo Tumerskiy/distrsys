@@ -16,7 +16,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     static {
         try {
-            centerRegistry = LocateRegistry.getRegistry(2964);
+            centerRegistry = LocateRegistry.getRegistry("localhost", 2000);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -83,7 +83,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     public String getRecordCounts(String managerId) throws RemoteException, NotBoundException {
         String result = "";
-        Registry registry = LocateRegistry.getRegistry(2964);
+        Registry registry = LocateRegistry.getRegistry("localhost", 2000);
         String[] servers = registry.list();
         for (String server : servers) {
             CenterServer curServer = (CenterServer) registry.lookup(server);
