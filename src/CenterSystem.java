@@ -29,12 +29,11 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return portNumber;
     }
 
-    public void setPortNumber(int portNumber) {
-        this.portNumber = portNumber;
-    }
 
-    public CenterSystem() throws RemoteException {
+    public CenterSystem(int portNumber) throws RemoteException {
         super();
+        this.portNumber = portNumber;
+        udpServer = new UDPServer(portNumber,this);
     }
 
     public UDPServer getUdpServer() {
