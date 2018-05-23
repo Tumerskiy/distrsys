@@ -11,16 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private String centerName = "";
-<<<<<<< HEAD
     protected  ConcurrentHashMap<Character,ArrayList<Records>> database = new ConcurrentHashMap<>();
     private UDPServer udpServer;
     private static Registry centerRegistry;
     private static int randomId=9999;
     private int portNumber;
-=======
-    protected ConcurrentHashMap<Character, ArrayList<Records>> database = new ConcurrentHashMap<>();
-    private static Registry centerRegistry;
->>>>>>> master
 
     static {
         try {
@@ -118,7 +113,6 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return result;
     }
 
-<<<<<<< HEAD
 
     public String getRecordCountsbyUDP(String managerId) throws RemoteException, NotBoundException {
         String result = "";
@@ -132,10 +126,8 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         Log.log(Log.getCurrentTime(),centerName,managerId,"getRecordCounts","Successful");
         return result;
     }
-    public int getLocalRecordCount() throws RemoteException{
-=======
+
     public int getLocalRecordCount() throws RemoteException {
->>>>>>> master
         return this.database.size();
     }
 
