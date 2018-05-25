@@ -6,6 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
@@ -15,6 +16,8 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private static Registry centerRegistry;
     private static int randomId=9999;
     private int portNumber;
+    private String centerRegistryHost;
+    private int centerRegistryUDPPort;
 
     static {
         try {
@@ -29,9 +32,11 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     }
 
 
-    public CenterSystem(int portNumber) throws RemoteException {
+    public CenterSystem(int portNumber, String centerRegistryHost, int centerRegistryUDPPort) throws RemoteException {
         super();
         this.portNumber = portNumber;
+        this.centerRegistryHost=centerRegistryHost;
+        this.centerRegistryUDPPort=centerRegistryUDPPort;
         udpServer = new UDPServer(portNumber,this);
         new Thread(udpServer).start();
     }
@@ -102,22 +107,15 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return studentRecord.getRecordID();
     }
 
-//    public String getRecordCounts(String managerId) throws RemoteException, NotBoundException {
-//        String result = "";
-//        Registry registry = LocateRegistry.getRegistry("localhost", 2000);
-//        String[] servers = registry.list();
-//        for (String server : servers) {
-//            CenterServer curServer = (CenterServer) registry.lookup(server);
-//            result += server + ":" + curServer.getLocalRecordCount() + " ";
-//        }
-//        Log.log(Log.getCurrentTime(), managerId, "getRecordCounts", result);
-//        return result;
-//    }
-
-
     public String getRecordCounts(String managerId) throws RemoteException, NotBoundException {
         String result = "";
-        result += "MTL:" + UDPClient.request("getCount","localhost",8180) + ", LVL:" + UDPClient.request("getCount","localhost",8181) +", DDO:" +UDPClient.request("getCount","localhost",8182);
+        String reply  = UDPClient.request("getservers",centerRegistryHost,centerRegistryUDPPort);
+        String[] serverList = reply.split(";");
+        for (String server : serverList){
+            String[] serverParams = server.split(":");
+            System.out.println(Arrays.toString(serverParams));
+            result+=serverParams[0]+":"+UDPClient.request("getCount",serverParams[1],Integer.parseInt(serverParams[2]))+" ";
+        }
         System.out.printf("\n"+result);
         //Log.log(Log.getCurrentTime(),centerName,managerId,"getRecordCounts, Successful");
         return result;
