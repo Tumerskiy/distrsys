@@ -22,8 +22,8 @@ public class TeacherRecord extends Records implements Serializable {
     public String genRecordID(){
         String recordId = "TR";
         String chars = "1234567890";
-        while (recordId.length()<6){
-            recordId+=chars.charAt(new Random().nextInt(chars.length()));
+        while (recordId.length()<8){
+            recordId+=new Random().nextInt(9);
         }
         return recordId;
     }

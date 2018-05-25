@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.net.*;
 
 public class UDPClient {
-    public static String request(String centerInitial,int centerPortNumber){
+    public static String request(String operation, String hostname ,int centerPortNumber){
         String receivedInfor = "";
         DatagramSocket datagramSocket = null;
         try {
@@ -10,15 +10,15 @@ public class UDPClient {
             try {
                 InetAddress inetAddress = InetAddress.getLocalHost();
                 int portNumber = centerPortNumber;
-                byte[] specifiedCenter = centerInitial.getBytes();
+                byte[] opsBytes = operation.getBytes();
 
-                DatagramPacket datagramPacket = new DatagramPacket(specifiedCenter,centerInitial.length(),inetAddress,portNumber);
+                DatagramPacket datagramPacket = new DatagramPacket(opsBytes,operation.length(),inetAddress,portNumber);
                 try {
                     datagramSocket.send(datagramPacket);
                     byte[] buffer = new byte[1024];
                     DatagramPacket replayByte = new DatagramPacket(buffer,buffer.length);
                     datagramSocket.receive(replayByte);
-                    receivedInfor = new String(replayByte.getData());
+                    receivedInfor = new String(replayByte.getData(),0, replayByte.getLength());
                     datagramSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();

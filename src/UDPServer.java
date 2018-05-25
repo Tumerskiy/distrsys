@@ -40,11 +40,14 @@ public class UDPServer implements Runnable {
                 DatagramPacket request = new DatagramPacket(buffer,buffer.length);
                 try {
                     datagramSocket.receive(request);
-                    String receiveData = new String(request.getData());
-                    if (receiveData.charAt(0) == centerSystem.getCenterName().charAt(0)) {
+                    System.out.printf("some data was recevied via udp");
+                    String receiveData = new String(request.getData(),0,request.getLength());
+                    System.out.printf(receiveData);
+                    if (receiveData.equals("getCount")) {
                         String reply = centerSystem.getLocalRecordCount() + "";
                         sendBuffer = reply.getBytes();
                     }
+
                     DatagramPacket send = new DatagramPacket(sendBuffer,sendBuffer.length,request.getAddress(),request.getPort());
                     datagramSocket.send(send);
 

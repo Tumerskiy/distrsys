@@ -37,6 +37,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         super();
         this.portNumber = portNumber;
         udpServer = new UDPServer(portNumber,this);
+        new Thread(udpServer).start();
     }
 
     public UDPServer getUdpServer() {
@@ -105,29 +106,24 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return studentRecord.getRecordID();
     }
 
+//    public String getRecordCounts(String managerId) throws RemoteException, NotBoundException {
+//        String result = "";
+//        Registry registry = LocateRegistry.getRegistry("localhost", 2000);
+//        String[] servers = registry.list();
+//        for (String server : servers) {
+//            CenterServer curServer = (CenterServer) registry.lookup(server);
+//            result += server + ":" + curServer.getLocalRecordCount() + " ";
+//        }
+//        Log.log(Log.getCurrentTime(), managerId, "getRecordCounts", result);
+//        return result;
+//    }
+
+
     public String getRecordCounts(String managerId) throws RemoteException, NotBoundException {
         String result = "";
-        Registry registry = LocateRegistry.getRegistry("localhost", 2000);
-        String[] servers = registry.list();
-        for (String server : servers) {
-            CenterServer curServer = (CenterServer) registry.lookup(server);
-            result += server + ":" + curServer.getLocalRecordCount() + " ";
-        }
-        Log.log(Log.getCurrentTime(), managerId, "getRecordCounts", result);
-        return result;
-    }
-
-
-    public String getRecordCountsbyUDP(String managerId) throws RemoteException, NotBoundException {
-        String result = "";
-        if (managerId.charAt(0) == 'M'){
-            result += "MTL:" + this.getLocalRecordCount() + ",LVD:" + UDPClient.request("LVL",1099) +",DDO:" +UDPClient.request("DDO",1099);
-        }else if (managerId.charAt(0) == 'L'){
-            result += "MTL:" + this.getLocalRecordCount() + ",LVD:" + this.getLocalRecordCount() +",DDO:" +UDPClient.request("DDO",1099);
-        }else if(managerId.charAt(0) == 'D'){
-            result += "MTL:" + UDPClient.request("MTL",1099) + ",LVD:" + UDPClient.request("LVL",1099) +",DDO:" +this.getLocalRecordCount();
-        }
-        Log.log(Log.getCurrentTime(),centerName,managerId,"getRecordCounts","Successful");
+        result += "MTL:" + UDPClient.request("getCount","localhost",8180) + ", LVL:" + UDPClient.request("getCount","localhost",8181) +", DDO:" +UDPClient.request("getCount","localhost",8182);
+        System.out.printf("\n"+result);
+        //Log.log(Log.getCurrentTime(),centerName,managerId,"getRecordCounts, Successful");
         return result;
     }
 

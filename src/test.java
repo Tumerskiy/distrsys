@@ -6,7 +6,8 @@ import java.util.Arrays;
 
 public class test {
     public static void main(String[] args) throws RemoteException {
-        Registry registry = LocateRegistry.getRegistry();
-        System.out.println(Arrays.toString(registry.list()));
+        //String result = "MTL:" + UDPClient.request("getCount","localhost",8180) + ", LVL:" + UDPClient.request("getCount","localhost",8181) +", DDO:" +UDPClient.request("getCount","localhost",8182);
+        String result = "MTL:" + UDPClient.request("getCount","localhost",8180);
+        System.out.println(result);
     }
 }
