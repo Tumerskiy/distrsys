@@ -19,6 +19,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private String centerRegistryHost;
     private int centerRegistryUDPPort;
 
+
     static {
         try {
             centerRegistry = LocateRegistry.getRegistry("localhost", 2000);
@@ -189,6 +190,15 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             }
         }
         return result;
+    }
+    public static void stopServer(String name ){
+        try {
+            centerRegistry.unbind(name);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (NotBoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }

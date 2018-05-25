@@ -1,6 +1,7 @@
 import java.net.InetAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Scanner;
 
 public class MTLServer {
 
@@ -14,6 +15,12 @@ public class MTLServer {
         registry.bind("MTL", server);
         UDPClient.request("register:MTL:"+InetAddress.getLocalHost().getHostName()+":8180",centerRegistryHost, centerRegistryUDPPort);
 
-        System.out.printf("MTL is launched");
+        System.out.println("MTL is launched");
+
+        System.out.println("press stop to shut down!");
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.nextLine().equals("stop")){
+            CenterRegistry.unRegister("MTL");
+        }
     }
 }

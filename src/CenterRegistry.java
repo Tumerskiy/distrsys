@@ -1,3 +1,4 @@
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -24,6 +25,13 @@ public class CenterRegistry {
         result=configFields[0]+ " successfully registered";
         System.out.printf(configFields[0]+ " successfully registered\n");
         return result;
+    }
+
+    public static void unRegister(String name){
+            servers.remove(name);
+            CenterSystem.stopServer(name);
+
+        System.out.println("Stop:" + name + " Server Successfully!");
     }
 
     public static String getServers() {
