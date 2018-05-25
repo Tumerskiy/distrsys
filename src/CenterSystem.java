@@ -7,6 +7,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
@@ -16,7 +18,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
 
     static {
         try {
-            centerRegistry = LocateRegistry.getRegistry();
+            centerRegistry = LocateRegistry.getRegistry("localhost", 2000);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -51,16 +53,18 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         TeacherRecord teacherRecord = new TeacherRecord(firstName, lastName, address, phone, specialization, location);
         char key = lastName.charAt(0);
         validateRecordId(teacherRecord, key);
-        if (database.get(key) == null) {
-            ArrayList<Records> value = new ArrayList<>();
-            value.add(teacherRecord);
-            database.put(key, value);
-        } else {
-            ArrayList<Records> value = database.get(key);
-            value.add(teacherRecord);
-            database.put(key, value);
+        synchronized (this) {
+            if (database.get(key) == null) {
+                ArrayList<Records> value = new ArrayList<>();
+                value.add(teacherRecord);
+                database.put(key, value);
+            } else {
+                ArrayList<Records> value = database.get(key);
+                value.add(teacherRecord);
+                database.put(key, value);
+            }
         }
-        Log.log(Log.getCurrentTime(), centerName, managerId, "createTRecord", "Successful");
+        Log.log(Log.getCurrentTime(), managerId, "createTRecord", "Create successfully! Record ID is "+teacherRecord.getRecordID());
         return teacherRecord.getRecordID();
     }
 
@@ -77,24 +81,29 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             value.add(studentRecord);
             database.put(key, value);
         }
-        Log.log(Log.getCurrentTime(), centerName, managerId, "createSRecord", "Successful");
+        Log.log(Log.getCurrentTime(), managerId, "createSRecord", "Create successfully! Record ID is "+studentRecord.getRecordID());
         return studentRecord.getRecordID();
     }
 
     public String getRecordCounts(String managerId) throws RemoteException, NotBoundException {
         String result = "";
-        Registry registry = LocateRegistry.getRegistry();
+        Registry registry = LocateRegistry.getRegistry("localhost", 2000);
         String[] servers = registry.list();
         for (String server : servers) {
             CenterServer curServer = (CenterServer) registry.lookup(server);
             result += server + ":" + curServer.getLocalRecordCount() + " ";
         }
-        Log.log(Log.getCurrentTime(), centerName, managerId, "getRecordCounts", "Successful");
+        Log.log(Log.getCurrentTime(), managerId, "getRecordCounts", result);
         return result;
     }
 
     public int getLocalRecordCount() throws RemoteException {
-        return this.database.size();
+        int sum=0;
+        for (ArrayList<Records> records:
+             database.values()) {
+            sum+=records.size();
+        }
+        return sum;
     }
 
     public String editRecord(String managerId, String recordID, String fieldName, String newValue) throws Exception {
@@ -135,21 +144,23 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                                 stmt.execute();
                                 result = "Record updated";
                                 String operation = "edit: " + prop.getName();
-                                Log.log(Log.getCurrentTime(), centerName, managerId, operation, "Successful");
+                                Log.log(Log.getCurrentTime(), managerId, operation, result);
                                 return result;
                             } else {
                                 String operation = "edit: " + prop.getName();
-                                Log.log(Log.getCurrentTime(), centerName, managerId, operation, "Failed");
-                                return result = "The newValue is not valid!";
+                                result = "The newValue is not valid!";
+                                Log.log(Log.getCurrentTime(), managerId, operation, result);
+                                return result;
                             }
                         }
 
                     }
                     result = "fieldName doesn't match record type";
                     String operation = "edit: " + fieldName;
-                    Log.log(Log.getCurrentTime(), centerName, managerId, operation, "Failed");
+                    Log.log(Log.getCurrentTime(), managerId, operation, result);
                 } else{
                     result = "No such record Id for this manager";
+                    Log.log(Log.getCurrentTime(), managerId, "edit: " + fieldName, result);
                 }
             }
         }

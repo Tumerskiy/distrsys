@@ -5,72 +5,67 @@ import java.util.Date;
 
 public class Log {
 
-    public static String getCurrentTime(){
-        Date date=new Date();
-        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate=dateFormat.format(date);
+    public static String getCurrentTime() {
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(date);
         return formattedDate;
     }
 
-    public static void log(String time,String location,String people,String operation,String result){
+    public static void log(String time, String managerId, String operation, String result) {
         File file = new File("./log");
-        if (!file.exists()){
+        if (!file.exists()) {
             file.mkdir();
         }
-        File inforClientFile = new File("./log/" + people + ".txt");
-        File inforServerFile = new File("./log/\" + server + \".txt");
+        File inforClientFile = new File("./log/" + managerId + ".txt");
+        File inforServerFile = new File("./log/" + managerId.substring(0, 3) + ".txt");
 
         BufferedWriter clientBufferedWriter = null;
         BufferedWriter serverBufferedWriter = null;
-        String clientInformation = time + ":" + operation + ": " + result + " on" + location;
-        String serverInformation = time + ":" + people + " " + operation + ": " + result ;
-        if (inforClientFile.exists()){
+        String clientInformation = time + " | " + operation + " | " + managerId.substring(0, 3) + "Server" + " | " + result + "\n";
+        String serverInformation = time + " | " + managerId + " | " + operation + " | " + result + "\n";
+        if (inforServerFile.exists()) {
             try {
-                clientBufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./log/" + people + ".txt",  true )));
-
-                clientBufferedWriter.write(clientInformation);
-
+                clientBufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inforServerFile,true)));
+                clientBufferedWriter.write(serverInformation);
+                clientBufferedWriter.flush();
+                clientBufferedWriter.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             try {
-                inforClientFile.createNewFile();
-                clientBufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./log/" + people + ".txt",  true )));
-                clientBufferedWriter.write(clientInformation);
-
+                inforServerFile.createNewFile();
+                clientBufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inforServerFile,true)));
+                clientBufferedWriter.write("time | managerId | operation | result\n"+serverInformation);
+                clientBufferedWriter.flush();
+                clientBufferedWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if (inforClientFile.exists()){
+        if (inforClientFile.exists()) {
             try {
-                serverBufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./log/" + location + ".txt",true)));
-                try {
-                    serverBufferedWriter.write(serverInformation);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                clientBufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inforClientFile,true)));
+                clientBufferedWriter.write(clientInformation);
+                clientBufferedWriter.flush();
+                clientBufferedWriter.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
-
-        }else {
-            try {
-                inforServerFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+        } else {
             try {
-                serverBufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./log/" + location + ".txt",true)));
-                try {
-                    serverBufferedWriter.write(serverInformation);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (FileNotFoundException e) {
+                inforClientFile.createNewFile();
+                clientBufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inforClientFile,true)));
+                clientBufferedWriter.write("time | operation | location | result\n"+clientInformation);
+                clientBufferedWriter.flush();
+                clientBufferedWriter.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
