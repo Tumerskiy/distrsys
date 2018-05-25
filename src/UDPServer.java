@@ -5,9 +5,19 @@ import java.net.SocketException;
 
 public class UDPServer implements Runnable {
     private int portNumber;
+    private CenterSystem centerSystem;
 
-    public UDPServer(int portNumber) {
+    public UDPServer(int portNumber, CenterSystem centerSystem) {
         this.portNumber = portNumber;
+        this.centerSystem = centerSystem;
+    }
+
+    public CenterSystem getCenterSystem() {
+        return centerSystem;
+    }
+
+    public void setCenterSystem(CenterSystem centerSystem) {
+        this.centerSystem = centerSystem;
     }
 
     public int getPortNumber() {
@@ -31,17 +41,10 @@ public class UDPServer implements Runnable {
                 try {
                     datagramSocket.receive(request);
                     String receiveData = new String(request.getData());
-
-                    String reply = null;
-                    if(receiveData.charAt(0) == 'M'){
-
-                    }else if (receiveData.charAt(0) == 'L'){
-
-
-                    }else if (receiveData.charAt(0) == 'D'){
-
+                    if (receiveData.charAt(0) == centerSystem.getCenterName().charAt(0)) {
+                        String reply = centerSystem.getLocalRecordCount() + "";
+                        sendBuffer = reply.getBytes();
                     }
-                    sendBuffer = reply.getBytes();
                     DatagramPacket send = new DatagramPacket(sendBuffer,sendBuffer.length,request.getAddress(),request.getPort());
                     datagramSocket.send(send);
 

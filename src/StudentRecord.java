@@ -12,7 +12,7 @@ public class StudentRecord extends Records implements Serializable {
         return coursesRegistered;
     }
 
-    public void setCoursesRegistered(ArrayList<String> coursesRegistered) {
+    public synchronized void setCoursesRegistered(ArrayList<String> coursesRegistered) {
         this.coursesRegistered = coursesRegistered;
     }
 
@@ -35,7 +35,7 @@ public class StudentRecord extends Records implements Serializable {
         this.recordID = genRecordID();
     }
 
-    public void setStatus(String status) {
+    public synchronized void setStatus(String status) {
         this.status = status;
     }
 
@@ -43,7 +43,7 @@ public class StudentRecord extends Records implements Serializable {
         return statusDate;
     }
 
-    public void setStatusDate(String statusDate) {
+    public synchronized void setStatusDate(String statusDate) {
         this.statusDate = statusDate;
     }
 

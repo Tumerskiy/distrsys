@@ -7,14 +7,18 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private String centerName = "";
-    protected ConcurrentHashMap<Character, ArrayList<Records>> database = new ConcurrentHashMap<>();
+    protected HashMap<Character,ArrayList<Records>> database = new HashMap<>();
+    private UDPServer udpServer;
     private static Registry centerRegistry;
+    private static int randomId=9999;
+    private int portNumber;
 
     static {
         try {
@@ -24,8 +28,24 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
     }
 
-    public CenterSystem() throws RemoteException {
+    public int getPortNumber() {
+        return portNumber;
+    }
+
+
+    public CenterSystem(int portNumber) throws RemoteException {
         super();
+        this.portNumber = portNumber;
+        udpServer = new UDPServer(portNumber,this);
+    }
+
+    public UDPServer getUdpServer() {
+        return udpServer;
+    }
+
+    public void setUdpServer(UDPServer udpServer) {
+        this.udpServer = udpServer;
+        new Thread(udpServer).start();
     }
 
     public String getCenterName() {
@@ -94,6 +114,20 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             result += server + ":" + curServer.getLocalRecordCount() + " ";
         }
         Log.log(Log.getCurrentTime(), managerId, "getRecordCounts", result);
+        return result;
+    }
+
+
+    public String getRecordCountsbyUDP(String managerId) throws RemoteException, NotBoundException {
+        String result = "";
+        if (managerId.charAt(0) == 'M'){
+            result += "MTL:" + this.getLocalRecordCount() + ",LVD:" + UDPClient.request("LVL",1099) +",DDO:" +UDPClient.request("DDO",1099);
+        }else if (managerId.charAt(0) == 'L'){
+            result += "MTL:" + this.getLocalRecordCount() + ",LVD:" + this.getLocalRecordCount() +",DDO:" +UDPClient.request("DDO",1099);
+        }else if(managerId.charAt(0) == 'D'){
+            result += "MTL:" + UDPClient.request("MTL",1099) + ",LVD:" + UDPClient.request("LVL",1099) +",DDO:" +this.getLocalRecordCount();
+        }
+        Log.log(Log.getCurrentTime(),centerName,managerId,"getRecordCounts","Successful");
         return result;
     }
 

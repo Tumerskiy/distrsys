@@ -37,7 +37,7 @@ public class TeacherRecord extends Records implements Serializable {
         return address;
     }
 
-    public void setAddress(String address) {
+    public synchronized void setAddress(String address) {
         this.address = address;
     }
 
@@ -45,7 +45,7 @@ public class TeacherRecord extends Records implements Serializable {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public synchronized void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -53,7 +53,7 @@ public class TeacherRecord extends Records implements Serializable {
         return specialiazation;
     }
 
-    public void addSpecialiazation(String specialiazation) {
+    public synchronized void addSpecialiazation(String specialiazation) {
         this.specialiazation = specialiazation;
     }
 
@@ -61,7 +61,7 @@ public class TeacherRecord extends Records implements Serializable {
         return location;
     }
 
-    public void setLocation(String location) {
+    public synchronized void setLocation(String location) {
         this.location = location;
     }
 }
