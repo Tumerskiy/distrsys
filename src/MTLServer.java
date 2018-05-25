@@ -10,10 +10,10 @@ public class MTLServer extends CenterSystem {
     }
 
     public static void main(String args[]) throws Exception {
-        CenterSystem server = new CenterSystem(1098);
-        Registry registry = LocateRegistry.getRegistry();
+
+        CenterSystem server = new CenterSystem();
+        Registry registry = LocateRegistry.createRegistry(2000);
         registry.bind("MTL", server);
         System.out.printf("MTL is launched");
-
     }
 }

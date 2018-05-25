@@ -10,10 +10,10 @@ public  class  Records implements Serializable {
     public Records(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.recordID = genRecordID();
+
     }
 
-    private String genRecordID(){
+    public String genRecordID(){
         String recordId = "";
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         while (recordId.length()<6){
@@ -22,6 +22,9 @@ public  class  Records implements Serializable {
         return recordId;
     }
 
+    public void regenRecordID() {
+        this.recordID = genRecordID();
+    }
 
     public String getFirstName() {
         return firstName;
@@ -43,8 +46,6 @@ public  class  Records implements Serializable {
         return recordID;
     }
 
-    public void regenRecordID() {
-        this.recordID = genRecordID();
-    }
+
 
 }
