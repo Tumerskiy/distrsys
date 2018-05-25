@@ -7,11 +7,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private String centerName = "";
-    protected  ConcurrentHashMap<Character,ArrayList<Records>> database = new ConcurrentHashMap<>();
+    protected HashMap<Character,ArrayList<Records>> database = new HashMap<>();
     private UDPServer udpServer;
     private static Registry centerRegistry;
     private static int randomId=9999;
