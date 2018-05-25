@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class StudentRecord extends Records implements Serializable {
 
@@ -19,6 +20,21 @@ public class StudentRecord extends Records implements Serializable {
         return status;
     }
 
+    @Override
+    public String genRecordID(){
+        String recordId = "SR";
+        String chars = "1234567890";
+        while (recordId.length()<6){
+            recordId+=chars.charAt(new Random().nextInt(chars.length()));
+        }
+        return recordId;
+    }
+
+    @Override
+    public void regenRecordID() {
+        this.recordID = genRecordID();
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
@@ -33,6 +49,7 @@ public class StudentRecord extends Records implements Serializable {
 
     public StudentRecord(String firstName, String lastName, ArrayList<String> coursesRegistered, String status, String statusDate) {
         super(firstName, lastName);
+        this.recordID = genRecordID();
         this.coursesRegistered=coursesRegistered;
         this.status = status;
         this.statusDate = statusDate;
