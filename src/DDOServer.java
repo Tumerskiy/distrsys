@@ -11,6 +11,7 @@ public class DDOServer {
         int centerRegistryUDPPort = 8190;
 
         CenterSystem server = new CenterSystem(8182,centerRegistryHost, centerRegistryUDPPort);
+        server.setCenterName("DDO");
         Registry registry = LocateRegistry.getRegistry(centerRegistryHost,centerRegistryRMIPort);
         registry.bind("DDO", server);
         UDPClient.request("register:DDO:"+InetAddress.getLocalHost().getHostName()+":8182",centerRegistryHost, centerRegistryUDPPort);
@@ -19,10 +20,7 @@ public class DDOServer {
         System.out.println("press stop to shut down!");
         Scanner scanner = new Scanner(System.in);
         if (scanner.nextLine().equals("stop")){
-            CenterRegistry.unRegister("DDO");
             server.stopServer();
-            registry.unbind("DDO");
-            UnicastRemoteObject.unexportObject(server,true);
         }
     }
 }

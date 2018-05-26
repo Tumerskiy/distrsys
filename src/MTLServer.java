@@ -12,6 +12,7 @@ public class MTLServer {
         int centerRegistryUDPPort = 8190;
 
         CenterSystem server = new CenterSystem(8180,centerRegistryHost, centerRegistryUDPPort);
+        server.setCenterName("MTL");
         Registry registry = LocateRegistry.getRegistry(centerRegistryHost,centerRegistryRMIPort);
         registry.bind("MTL", server);
         UDPClient.request("register:MTL:"+InetAddress.getLocalHost().getHostName()+":8180",centerRegistryHost, centerRegistryUDPPort);
@@ -21,10 +22,7 @@ public class MTLServer {
         System.out.println("press stop to shut down!");
         Scanner scanner = new Scanner(System.in);
         if (scanner.nextLine().equals("stop")){
-            CenterRegistry.unRegister("MTL");
             server.stopServer();
-            registry.unbind("MTL");
-            UnicastRemoteObject.unexportObject(server,true);
         }
     }
 }

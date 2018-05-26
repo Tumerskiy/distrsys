@@ -29,9 +29,10 @@ public class CenterRegistry {
         return result;
     }
 
-    public static void unRegister(String name){
+    public static String unRegister(String name){
         servers.remove(name);
         System.out.println("Stop:" + name + " Server Successfully!");
+        return "Stop:" + name + " Server Successfully!";
     }
 
     public static String getServers() {

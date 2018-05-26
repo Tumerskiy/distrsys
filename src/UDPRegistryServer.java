@@ -32,7 +32,11 @@ public class UDPRegistryServer implements Runnable {
                         reply = CenterRegistry.register(requestData[1] + ":" + requestData[2] + ":" + requestData[3]);
                     } else if (requestData[0].equals("getservers")) {
                         reply = CenterRegistry.getServers();
-                    } else {
+                    } else if (requestData[0].equals("unregister")){
+                        reply = CenterRegistry.unRegister(requestData[1]);
+                    }
+
+                      else {
                         reply = "wrong request";
                     }
                         sendBuffer = reply.getBytes();

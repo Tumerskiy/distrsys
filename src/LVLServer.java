@@ -11,6 +11,7 @@ public class LVLServer {
         int centerRegistryUDPPort = 8190;
 
         CenterSystem server = new CenterSystem(8181,centerRegistryHost, centerRegistryUDPPort);
+        server.setCenterName("LVL");
         Registry registry = LocateRegistry.getRegistry(centerRegistryHost,centerRegistryRMIPort);
         registry.bind("LVL", server);
         UDPClient.request("register:LVL:"+InetAddress.getLocalHost().getHostName()+":8181",centerRegistryHost, centerRegistryUDPPort);
@@ -19,10 +20,7 @@ public class LVLServer {
         System.out.println("press stop to shut down!");
         Scanner scanner = new Scanner(System.in);
         if (scanner.nextLine().equals("stop")){
-            CenterRegistry.unRegister("LVL");
             server.stopServer();
-            registry.unbind("LVL");
-            UnicastRemoteObject.unexportObject(server,true);
         }
     }
 }
