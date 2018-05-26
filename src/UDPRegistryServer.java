@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 public class UDPRegistryServer implements Runnable {
     private int portNumber;
+    private boolean stop = true;
+    private DatagramSocket datagramSocket = null;
 
     public UDPRegistryServer(int portNumber) {
         this.portNumber = portNumber;
@@ -13,12 +15,11 @@ public class UDPRegistryServer implements Runnable {
 
     @Override
     public void run() {
-        DatagramSocket datagramSocket = null;
         try {
             datagramSocket = new DatagramSocket(portNumber);
             byte[] buffer = new byte[1024];
             byte[] sendBuffer = new byte[1024];
-            while (true){
+            while (stop){
                 DatagramPacket request = new DatagramPacket(buffer,buffer.length);
                 try {
                     datagramSocket.receive(request);
@@ -40,12 +41,16 @@ public class UDPRegistryServer implements Runnable {
                         datagramSocket.send(send);
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("UDP Registry Server socket is closed!");
                 }
             }
         } catch (SocketException e) {
             e.printStackTrace();
         }
-
+        System.out.println("UDP Registry Server is closed!");
+    }
+    public void stopServer(){
+        datagramSocket.close();
+        stop = false;
     }
 }

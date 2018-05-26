@@ -6,6 +6,8 @@ import java.net.SocketException;
 public class UDPServer implements Runnable {
     private int portNumber;
     private CenterSystem centerSystem;
+    private boolean stop = true;
+    private DatagramSocket datagramSocket = null;
 
     public UDPServer(int portNumber, CenterSystem centerSystem) {
         this.portNumber = portNumber;
@@ -31,12 +33,11 @@ public class UDPServer implements Runnable {
 
     @Override
     public void run() {
-        DatagramSocket datagramSocket = null;
         try {
             datagramSocket = new DatagramSocket(portNumber);
             byte[] buffer = new byte[1024];
             byte[] sendBuffer = new byte[1024];
-            while (true){
+            while (stop){
                 DatagramPacket request = new DatagramPacket(buffer,buffer.length);
                 try {
                     datagramSocket.receive(request);
@@ -52,12 +53,19 @@ public class UDPServer implements Runnable {
                     datagramSocket.send(send);
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("UDP Server socket is closed!");
                 }
             }
         } catch (SocketException e) {
             e.printStackTrace();
         }
+        System.out.println("UDP Server is closed!");
+
+    }
+
+    public void stopServer(){
+        datagramSocket.close();
+        stop = false;
 
     }
 }

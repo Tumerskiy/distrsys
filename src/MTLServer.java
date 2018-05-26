@@ -1,6 +1,7 @@
 import java.net.InetAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 public class MTLServer {
@@ -21,6 +22,9 @@ public class MTLServer {
         Scanner scanner = new Scanner(System.in);
         if (scanner.nextLine().equals("stop")){
             CenterRegistry.unRegister("MTL");
+            server.stopServer();
+            registry.unbind("MTL");
+            UnicastRemoteObject.unexportObject(server,true);
         }
     }
 }

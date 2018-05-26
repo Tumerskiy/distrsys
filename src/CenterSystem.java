@@ -18,6 +18,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     private int portNumber;
     private String centerRegistryHost;
     private int centerRegistryUDPPort;
+    private Thread thread;
 
 
     static {
@@ -39,7 +40,8 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         this.centerRegistryHost=centerRegistryHost;
         this.centerRegistryUDPPort=centerRegistryUDPPort;
         udpServer = new UDPServer(portNumber,this);
-        new Thread(udpServer).start();
+        thread = new Thread(udpServer);
+        thread.start();
     }
 
     public UDPServer getUdpServer() {
@@ -191,14 +193,10 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
         return result;
     }
-    public static void stopServer(String name ){
-        try {
-            centerRegistry.unbind(name);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
-            e.printStackTrace();
-        }
+    public  void stopServer(){
+            udpServer.stopServer();
+            thread.interrupt();
+
     }
 
 }

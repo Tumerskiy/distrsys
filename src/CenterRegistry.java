@@ -1,9 +1,11 @@
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+import java.net.MalformedURLException;
+import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class CenterRegistry {
     public static Registry rmiRegistry;
@@ -28,9 +30,7 @@ public class CenterRegistry {
     }
 
     public static void unRegister(String name){
-            servers.remove(name);
-            CenterSystem.stopServer(name);
-
+        servers.remove(name);
         System.out.println("Stop:" + name + " Server Successfully!");
     }
 
@@ -50,16 +50,27 @@ public class CenterRegistry {
     public static void main(String[] args){
         try {
             rmiRegistry = LocateRegistry.createRegistry(2000);
-            /*
-            From here we don't have to do anything with rmiregistry binding, it's done on server implementation side.
-             */
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+            /*
+            From here we don't have to do anything with rmiregistry binding, it's done on server implementation side.
+             */
         UDPRegistryServer udpserver = new UDPRegistryServer(8190);
-        new Thread(udpserver).start();
+        Thread thread = new Thread(udpserver);
+        thread.start();
 
         System.out.printf("rmiRegistry launched on UDP port 2000\n centerRegistry is waiting for servers requests\n");
+        System.out.println("press stop to shut down!");
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.nextLine().equals("stop")){
+            try {
+                UnicastRemoteObject.unexportObject(rmiRegistry,true);
+                udpserver.stopServer();
+            } catch (NoSuchObjectException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

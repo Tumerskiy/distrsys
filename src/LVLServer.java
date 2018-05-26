@@ -1,6 +1,8 @@
 import java.net.InetAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 public class LVLServer {
     public static void main(String args[]) throws Exception {
@@ -13,6 +15,14 @@ public class LVLServer {
         registry.bind("LVL", server);
         UDPClient.request("register:LVL:"+InetAddress.getLocalHost().getHostName()+":8181",centerRegistryHost, centerRegistryUDPPort);
 
-        System.out.printf("LVL is launched");
+        System.out.println("LVL is launched");
+        System.out.println("press stop to shut down!");
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.nextLine().equals("stop")){
+            CenterRegistry.unRegister("LVL");
+            server.stopServer();
+            registry.unbind("LVL");
+            UnicastRemoteObject.unexportObject(server,true);
+        }
     }
 }

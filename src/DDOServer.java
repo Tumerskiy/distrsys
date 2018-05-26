@@ -1,6 +1,8 @@
 import java.net.InetAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 public class DDOServer {
     public static void main(String args[]) throws Exception {
@@ -13,7 +15,15 @@ public class DDOServer {
         registry.bind("DDO", server);
         UDPClient.request("register:DDO:"+InetAddress.getLocalHost().getHostName()+":8182",centerRegistryHost, centerRegistryUDPPort);
 
-        System.out.printf("DDO is launched");
+        System.out.println("DDO is launched");
+        System.out.println("press stop to shut down!");
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.nextLine().equals("stop")){
+            CenterRegistry.unRegister("DDO");
+            server.stopServer();
+            registry.unbind("DDO");
+            UnicastRemoteObject.unexportObject(server,true);
+        }
     }
 }
 
