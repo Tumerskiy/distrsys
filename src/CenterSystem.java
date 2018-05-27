@@ -120,7 +120,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
             result+=serverParams[0]+":"+UDPClient.request("getCount",serverParams[1],Integer.parseInt(serverParams[2]))+" ";
         }
         System.out.printf("\n"+result);
-        //Log.log(Log.getCurrentTime(),centerName,managerId,"getRecordCounts, Successful");
+        Log.log(Log.getCurrentTime(), managerId, "getRecordCounts", "Successful");
         return result;
     }
 
@@ -133,10 +133,12 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return sum;
     }
 
+
+
     public String editRecord(String managerId, String recordID, String fieldName, String newValue) throws Exception {
         String result = "";
         Boolean ableModified = true;
-
+        boolean findRecord=false;
         for (char key : database.keySet()) {
             for (Records record : database.get(key)) {
                 if (record.getRecordID().equals(recordID)) {
@@ -169,7 +171,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                             if (ableModified) {
                                 Statement stmt = new Statement(record, prop.getWriteMethod().getName(), new Object[]{newValue});
                                 stmt.execute();
-                                result = "Record updated";
+                                result = "The value in "+fieldName+" is changed to "+ newValue;
                                 String operation = "edit: " + prop.getName();
                                 Log.log(Log.getCurrentTime(), managerId, operation, result);
                                 return result;
@@ -185,12 +187,11 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                     result = "fieldName doesn't match record type";
                     String operation = "edit: " + fieldName;
                     Log.log(Log.getCurrentTime(), managerId, operation, result);
-                } else{
-                    result = "No such record Id for this manager";
-                    Log.log(Log.getCurrentTime(), managerId, "edit: " + fieldName, result);
                 }
             }
         }
+        result = "No such record Id for this manager";
+        Log.log(Log.getCurrentTime(), managerId, "edit: " + fieldName, result);
         return result;
     }
     public  void stopServer(){

@@ -18,7 +18,6 @@ public class MTLServer {
         UDPClient.request("register:MTL:"+InetAddress.getLocalHost().getHostName()+":8180",centerRegistryHost, centerRegistryUDPPort);
 
         System.out.println("MTL is launched");
-
         System.out.println("press stop to shut down!");
         Scanner scanner = new Scanner(System.in);
         if (scanner.nextLine().equals("stop")){
