@@ -193,7 +193,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
         return result;
     }
-    public  void stopServer(){
+    public void stopServer(){
         UDPClient.request("unregister:"+centerName,centerRegistryHost,centerRegistryUDPPort);
         try {
             udpServer.stopServer();
