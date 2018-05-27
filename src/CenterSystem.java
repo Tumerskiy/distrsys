@@ -138,7 +138,6 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     public String editRecord(String managerId, String recordID, String fieldName, String newValue) throws Exception {
         String result = "";
         Boolean ableModified = true;
-        boolean findRecord=false;
         for (char key : database.keySet()) {
             for (Records record : database.get(key)) {
                 if (record.getRecordID().equals(recordID)) {
