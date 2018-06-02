@@ -19,7 +19,7 @@ public class CenterRegistry {
      */
 
 
-    public static  String register(String config){
+    public static String register(String config){
         String result = "";
         String[] configFields = config.split(":");
         String[] address = {configFields[1], configFields[2]};
