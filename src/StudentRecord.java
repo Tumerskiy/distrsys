@@ -4,15 +4,15 @@ import java.util.Random;
 
 public class StudentRecord extends Records implements Serializable {
 
-    private ArrayList<String> coursesRegistered;
+    private String[] coursesRegistered;
     private String status;
     private String statusDate;
 
-    public ArrayList<String> getCoursesRegistered() {
-        return coursesRegistered;
-    }
+//    public ArrayList<String> getCoursesRegistered() {
+//        return coursesRegistered;
+//    }
 
-    public synchronized void setCoursesRegistered(ArrayList<String> coursesRegistered) {
+    public synchronized void setCoursesRegistered(String[] coursesRegistered) {
         this.coursesRegistered = coursesRegistered;
     }
 
@@ -47,7 +47,7 @@ public class StudentRecord extends Records implements Serializable {
         this.statusDate = statusDate;
     }
 
-    public StudentRecord(String firstName, String lastName, ArrayList<String> coursesRegistered, String status, String statusDate) {
+    public StudentRecord(String firstName, String lastName, String[] coursesRegistered, String status, String statusDate) {
         super(firstName, lastName);
         this.recordID = genRecordID();
         this.coursesRegistered=coursesRegistered;

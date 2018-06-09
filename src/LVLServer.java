@@ -1,26 +1,45 @@
-import java.net.InetAddress;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
+import CenterServerOrb.CenterServer;
+import CenterServerOrb.CenterServerHelper;
+import org.omg.CORBA.ORB;
+import org.omg.CosNaming.NameComponent;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
+import org.omg.PortableServer.POA;
+
 import java.util.Scanner;
 
 public class LVLServer {
     public static void main(String args[]) throws Exception {
         String centerRegistryHost = "localhost";
-        int centerRegistryRMIPort = 2000;
         int centerRegistryUDPPort = 8190;
+        String serverName = "LVL";
 
-        CenterSystem server = new CenterSystem(8181,centerRegistryHost, centerRegistryUDPPort);
-        server.setCenterName("LVL");
-        Registry registry = LocateRegistry.getRegistry(centerRegistryHost,centerRegistryRMIPort);
-        registry.bind("LVL", server);
-        UDPClient.request("register:LVL:"+InetAddress.getLocalHost().getHostName()+":8181",centerRegistryHost, centerRegistryUDPPort);
+        ORB orb = ORB.init(args, null);
+        POA rootpoa =
+                (POA)orb.resolve_initial_references("RootPOA");
+        rootpoa.the_POAManager().activate();
 
-        System.out.println("LVL is launched");
+        CenterSystem server = new CenterSystem(serverName, 8181,centerRegistryHost, centerRegistryUDPPort);
+
+        server.setORB(orb);
+
+        org.omg.CORBA.Object ref =
+                rootpoa.servant_to_reference(server);
+        CenterServer href = CenterServerHelper.narrow(ref);
+        org.omg.CORBA.Object objRef =
+                orb.resolve_initial_references("NameService");
+        NamingContextExt ncRef =
+                NamingContextExtHelper.narrow(objRef);
+        NameComponent path[] = ncRef.to_name( serverName );
+        ncRef.rebind(path, href);
+
+
+        System.out.println(serverName+" is launched");
+        orb.run();
         System.out.println("press stop to shut down!");
         Scanner scanner = new Scanner(System.in);
         if (scanner.nextLine().equals("stop")){
-            server.stopServer();
+            server.shutdown();
         }
     }
 }

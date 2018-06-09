@@ -1,67 +1,83 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
+import CenterServerOrb.CenterServer;
+import CenterServerOrb.CenterServerHelper;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Scanner;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+
+import org.omg.CORBA.ORB;
+import org.omg.CORBA.Object;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
 
 public class Client {
-    public static void main(String args[]) throws Exception {
-
-        /*
-        using scanner get manager name, check if subs(0,3) within MTL LVL DDO
-        set serverName based on that
-        */
-        /*
-        some method calls part
-        in form of:
-        mtlServer.createTRecord(a,b,c,d...)
-
-        probably client should be interactive, and consume input with Scanner
-        based on which we should make case{} for called methods
-         */
-        
-        new Client().scan();
+    public Client() {
     }
 
-    public void scan() throws Exception {
-        Registry registry = LocateRegistry.getRegistry("localhost",2000);
-        CenterServer stub;
+    public static void main(String[] args) throws Exception {
+        (new Client()).scan(args);
+    }
+
+    public void scan(String[] args) throws Exception {
+        ORB orb = ORB.init(args, (Properties)null);
+        Object objRef = orb.resolve_initial_references("NameService");
+        NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
         String managerId = "";
         boolean ifContinue = true;
+
         do {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Please input your manager ID:");
             managerId = scanner.nextLine();
-            if (!verifyId(managerId)) {
+            if (!this.verifyId(managerId)) {
                 System.out.println("ManagerId error. Please input again");
-                continue;
+            } else {
+                String var9 = managerId.substring(0, 3);
+                byte var10 = -1;
+                switch(var9.hashCode()) {
+                    case 67535:
+                        if (var9.equals("DDO")) {
+                            var10 = 2;
+                        }
+                        break;
+                    case 75778:
+                        if (var9.equals("LVL")) {
+                            var10 = 1;
+                        }
+                        break;
+                    case 76677:
+                        if (var9.equals("MTL")) {
+                            var10 = 0;
+                        }
+                }
+
+                CenterServer service;
+                switch(var10) {
+                    case 0:
+                        service = CenterServerHelper.narrow(ncRef.resolve_str("MTL"));
+                        ifContinue = this.processOperation(service, managerId);
+                        break;
+                    case 1:
+                        service = CenterServerHelper.narrow(ncRef.resolve_str("LVL"));
+                        ifContinue = this.processOperation(service, managerId);
+                        break;
+                    case 2:
+                        service = CenterServerHelper.narrow(ncRef.resolve_str("DDO"));
+                        ifContinue = this.processOperation(service, managerId);
+                }
             }
-            switch (managerId.substring(0, 3)) {
-                case "MTL": {
-                    stub = (CenterServer) registry.lookup("MTL");
-                    ifContinue = processOperation(stub,managerId);
-                    break;
-                }
-                case "LVL": {
-                    stub = (CenterServer) registry.lookup("LVL");
-                    ifContinue = processOperation(stub,managerId);
-                    break;
-                }
-                case "DDO": {
-                    stub = (CenterServer) registry.lookup("DDO");
-                    ifContinue = processOperation(stub,managerId);
-                    break;
-                }
-            }
-        } while (ifContinue);
+        } while(ifContinue);
+
     }
 
     public boolean processOperation(CenterServer stub, String managerId) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        int option = -1;
+        int option = 0;
         System.out.println("Please select your operation:");
         System.out.println("1> Create Teacher Record.");
         System.out.println("2> Create Student Record.");
@@ -69,30 +85,24 @@ public class Client {
         System.out.println("4> Edit Record.");
         System.out.println("5> Exit.");
         option = scanner.nextInt();
-        switch (option) {
-            case 1: {
-                createTRecord(stub,managerId);
+        switch(option) {
+            case 1:
+                this.createTRecord(stub, managerId);
                 break;
-            }
-            case 2: {
-                createSRecord(stub,managerId);
+            case 2:
+                this.createSRecord(stub, managerId);
                 break;
-            }
-            case 3: {
-                getRecordCounts(stub,managerId);
+            case 3:
+                this.getRecordCounts(stub, managerId);
                 break;
-            }
-            case 4: {
-                editRecord(stub, managerId);
+            case 4:
+                this.editRecord(stub, managerId);
                 break;
-            }
-            case 5: {
+            case 5:
                 System.out.println("GoodBye.");
-                break;
-            }
         }
-        if (option == 5) return false;
-        else return true;
+
+        return option != 5;
     }
 
     public void createTRecord(CenterServer stub, String managerId) throws RemoteException {
@@ -104,13 +114,13 @@ public class Client {
         System.out.println("Please input teacher's address");
         String address = scanner.nextLine().trim();
         System.out.println("Please input your teacher's specialization:");
-        String specialiazation=scanner.nextLine().trim();
+        String specialiazation = scanner.nextLine().trim();
         System.out.println("Please input teacher's location:");
         String location = scanner.nextLine().trim();
         System.out.println("Please input teacher's phone:");
-        String phone =  scanner.nextLine();
-        String result=stub.createTRecord(managerId, firstName, lastName, address, phone, specialiazation, location);
-        System.out.println("Teacher record with id: "+result+" was created");
+        String phone = scanner.nextLine();
+        String result = stub.createTRecord(managerId, firstName, lastName, address, phone, specialiazation, location);
+        System.out.println("Teacher record with id: " + result + " was created");
     }
 
     public void createSRecord(CenterServer stub, String managerId) throws RemoteException {
@@ -124,13 +134,9 @@ public class Client {
         System.out.println("Please input your student's statusDate:");
         String statusDate = scanner.nextLine().trim();
         System.out.println("Please input student's courses(split with space):");
-        ArrayList<String> coursesRegistered = new ArrayList<>();
-        for (String s :
-                scanner.nextLine().split(" ")) {
-            coursesRegistered.add(s);
-        }
+        String[] coursesRegistered = scanner.nextLine().split(" ");
         String result = stub.createSRecord(managerId, firstName, lastName, coursesRegistered, status, statusDate);
-        System.out.println("Student record with id: "+result+" was created");
+        System.out.println("Student record with id: " + result + " was created");
     }
 
     public void getRecordCounts(CenterServer stub, String managerId) throws RemoteException, NotBoundException {
@@ -146,17 +152,11 @@ public class Client {
         System.out.println("Please input new value:");
         String newValue = scanner.nextLine().trim();
         String result = stub.editRecord(managerId, recordId, fieldName, newValue);
-        System.out.printf(result+"\n");
-
+        System.out.printf(result + "\n");
     }
-
 
     public boolean verifyId(String managerId) throws Exception {
         String addr = managerId.substring(0, 3);
-        if (addr.equals("MTL") || addr.equals("LVL") || addr.equals("DDO")) {
-            return true;
-        } else {
-            return false;
-        }
+        return addr.equals("MTL") || addr.equals("LVL") || addr.equals("DDO");
     }
 }

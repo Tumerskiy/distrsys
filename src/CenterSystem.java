@@ -1,4 +1,14 @@
+import CenterServerOrb.*;
+import org.omg.CosNaming.*;
+import org.omg.CosNaming.NamingContextPackage.*;
+import org.omg.CORBA.*;
+import org.omg.PortableServer.*;
+import org.omg.PortableServer.POA;
+
+
+
 import java.beans.*;
+import java.net.InetAddress;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -9,7 +19,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class CenterSystem extends UnicastRemoteObject implements CenterServer {
+public class CenterSystem extends CenterServerPOA {
+    private ORB orb;
+    public void setORB(ORB orb_val) {
+        orb = orb_val;
+    }
+
+
     private String centerName = "";
     protected HashMap<Character,ArrayList<Records>> database = new HashMap<>();
     private UDPServer udpServer;
@@ -34,14 +50,17 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
     }
 
 
-    public CenterSystem(int portNumber, String centerRegistryHost, int centerRegistryUDPPort) throws RemoteException {
+    public CenterSystem(String centerName,int portNumber, String centerRegistryHost, int centerRegistryUDPPort) throws Exception {
         super();
         this.portNumber = portNumber;
         this.centerRegistryHost=centerRegistryHost;
         this.centerRegistryUDPPort=centerRegistryUDPPort;
+        this.centerName=centerName;
         udpServer = new UDPServer(portNumber,this);
         thread = new Thread(udpServer);
         thread.start();
+        UDPClient.request("register:"+centerName+":"+InetAddress.getLocalHost().getHostName()+":"+portNumber,centerRegistryHost, centerRegistryUDPPort);
+
     }
 
     public UDPServer getUdpServer() {
@@ -74,7 +93,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
     }
 
-    public String createTRecord(String managerId, String firstName, String lastName, String address, String phone, String specialization, String location) throws RemoteException {
+    public String createTRecord(String managerId, String firstName, String lastName, String address, String phone, String specialization, String location) {
         TeacherRecord teacherRecord = new TeacherRecord(firstName, lastName, address, phone, specialization, location);
         char key = lastName.charAt(0);
         validateRecordId(teacherRecord, key);
@@ -93,7 +112,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return teacherRecord.getRecordID();
     }
 
-    public String createSRecord(String managerId, String firstName, String lastName, ArrayList<String> courseRegistered, String status, String statusDate) throws RemoteException {
+    public String createSRecord(String managerId, String firstName, String lastName, String[] courseRegistered, String status, String statusDate) {
         StudentRecord studentRecord = new StudentRecord(firstName, lastName, courseRegistered, status, statusDate);
         char key = lastName.charAt(0);
         validateRecordId(studentRecord, key);
@@ -110,7 +129,7 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return studentRecord.getRecordID();
     }
 
-    public String getRecordCounts(String managerId) throws RemoteException, NotBoundException {
+    public String getRecordCounts(String managerId) {
         String result = "";
         String reply  = UDPClient.request("getservers",centerRegistryHost,centerRegistryUDPPort);
         String[] serverList = reply.split(";");
@@ -133,9 +152,10 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         return sum;
     }
 
-    public String editRecord(String managerId, String recordID, String fieldName, String newValue) throws Exception {
+    public String editRecord(String managerId, String recordID, String fieldName, String newValue) {
         String result = "";
         Boolean ableModified = true;
+        BeanInfo recordInfo;
 
         for (char key : database.keySet()) {
             for (Records record : database.get(key)) {
@@ -144,7 +164,12 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                      not sure if in this particular case it will get proper specific class of record, eg StudentRecord or
                      Teacher record, it could take its superclass Record...
                     */
-                    BeanInfo recordInfo = Introspector.getBeanInfo(record.getClass());
+                    try {
+                         recordInfo = Introspector.getBeanInfo(record.getClass());
+                    } catch (Exception e)
+                    {
+                        return e.getMessage();
+                    }
 
                     /*
                     recordPds in this case is the array of properties available in this class
@@ -167,8 +192,12 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
                             * look into java reflection and java beans library.
                              */
                             if (ableModified) {
-                                Statement stmt = new Statement(record, prop.getWriteMethod().getName(), new Object[]{newValue});
-                                stmt.execute();
+                                Statement stmt = new Statement(record, prop.getWriteMethod().getName(), new java.lang.Object[]{newValue});
+                                try {
+                                    stmt.execute();
+                                } catch (Exception e){
+                                    return e.getMessage();
+                                }
                                 result = "Record updated";
                                 String operation = "edit: " + prop.getName();
                                 Log.log(Log.getCurrentTime(), managerId, operation, result);
@@ -193,17 +222,22 @@ public class CenterSystem extends UnicastRemoteObject implements CenterServer {
         }
         return result;
     }
-    public void stopServer(){
-        UDPClient.request("unregister:"+centerName,centerRegistryHost,centerRegistryUDPPort);
-        try {
-            udpServer.stopServer();
-            centerRegistry.unbind(centerName);
-            UnicastRemoteObject.unexportObject(this,true);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
-            e.printStackTrace();
-        }
+
+    public void shutdown() {
+        orb.shutdown(false);
     }
+
+//    public  void stopServer(){
+//        UDPClient.request("unregister:"+centerName,centerRegistryHost,centerRegistryUDPPort);
+//        try {
+//            udpServer.stopServer();
+//            centerRegistry.unbind(centerName);
+//            UnicastRemoteObject.unexportObject(this,true);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        } catch (NotBoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

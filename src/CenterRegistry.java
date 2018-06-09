@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class CenterRegistry {
-    public static Registry rmiRegistry;
     private static HashMap<String,String[]> servers = new HashMap<>();
     /*
     Exchange between clients and this server due to simplification for UDP implementation uses Strings,
@@ -49,11 +48,11 @@ public class CenterRegistry {
     }
 
     public static void main(String[] args){
-        try {
-            rmiRegistry = LocateRegistry.createRegistry(2000);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            rmiRegistry = LocateRegistry.createRegistry(2000);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
             /*
             From here we don't have to do anything with rmiregistry binding, it's done on server implementation side.
              */
@@ -61,16 +60,16 @@ public class CenterRegistry {
         Thread thread = new Thread(udpserver);
         thread.start();
 
-        System.out.printf("rmiRegistry launched on UDP port 2000\n centerRegistry is waiting for servers requests\n");
+        System.out.printf(" centerRegistry is waiting for servers requests\n");
         System.out.println("press stop to shut down!");
         Scanner scanner = new Scanner(System.in);
         if (scanner.nextLine().equals("stop")){
-            try {
-                UnicastRemoteObject.unexportObject(rmiRegistry,true);
+            //try {
+                //UnicastRemoteObject.unexportObject(rmiRegistry,true);
                 udpserver.stopServer();
-            } catch (NoSuchObjectException e) {
-                e.printStackTrace();
-            }
+//            } catch (NoSuchObjectException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
